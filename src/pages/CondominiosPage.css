@@ -49,6 +49,17 @@
     font-size: 0.8rem;
 }
 
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6b7280;
+    font-size: 1rem;
+}
+
+.empty-state p {
+    margin: 0;
+}
+
 .page-card {
     background: #fff;
     border-radius: 12px;

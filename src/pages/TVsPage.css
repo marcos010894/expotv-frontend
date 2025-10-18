@@ -63,6 +63,17 @@
     font-size: 16px;
 }
 
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6b7280;
+    font-size: 1rem;
+}
+
+.empty-state p {
+    margin: 0;
+}
+
 @media (max-width: 768px) {
     .sindicos-page {
         padding: 30px 16px;

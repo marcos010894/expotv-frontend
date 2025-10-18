@@ -116,13 +116,19 @@ export default function TVsPage({ onRegister, onEdit, onView, onNotification }: 
             </button>
           </div>
           
-          <DataTable
-            columns={columns}
-            data={tvsData}
-            onView={handleView}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
+          {tvsData.length === 0 ? (
+            <div className="empty-state">
+              <p>Nenhuma TV encontrada.</p>
+            </div>
+          ) : (
+            <DataTable
+              columns={columns}
+              data={tvsData}
+              onView={handleView}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          )}
         </div>
       </main>
 

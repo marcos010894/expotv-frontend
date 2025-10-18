@@ -111,13 +111,19 @@ export default function CondominiosPage({ onRegister, onEdit, onView, onNotifica
             </button>
           </div>
           
-          <DataTable
-            columns={columns}
-            data={condominiosData}
-            onView={handleView}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
+          {condominiosData.length === 0 ? (
+            <div className="empty-state">
+              <p>Nenhum condomínio encontrado.</p>
+            </div>
+          ) : (
+            <DataTable
+              columns={columns}
+              data={condominiosData}
+              onView={handleView}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          )}
         </div>
       </main>
 

@@ -122,12 +122,18 @@ export default function AvisosPage({ onRegister, onEdit, onView, onNotification 
             </button>
           </div>
           
-          <DataTable
-            columns={columns}
-            data={avisosData}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
+          {avisosData.length === 0 ? (
+            <div className="empty-state">
+              <p>Nenhum aviso encontrado.</p>
+            </div>
+          ) : (
+            <DataTable
+              columns={columns}
+              data={avisosData}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          )}
         </div>
       </main>
 

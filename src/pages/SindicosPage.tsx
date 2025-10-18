@@ -102,12 +102,18 @@ export default function SindicosPage({ onRegister, onEdit, onNotification }: Sin
             </button>
           </div>
           
-          <DataTable
-            columns={columns}
-            data={sindicosData}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
+          {sindicosData.length === 0 ? (
+            <div className="empty-state">
+              <p>Nenhum síndico encontrado.</p>
+            </div>
+          ) : (
+            <DataTable
+              columns={columns}
+              data={sindicosData}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          )}
         </div>
       </main>
 

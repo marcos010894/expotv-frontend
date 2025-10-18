@@ -127,13 +127,19 @@ export default function AnunciosPage({ onRegister, onEdit, onView, onNotificatio
             </button>
           </div>
           
-          <DataTable
-            columns={columns}
-            data={anunciosData}
-            onView={handleView}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
+          {anunciosData.length === 0 ? (
+            <div className="empty-state">
+              <p>Nenhum anúncio encontrado.</p>
+            </div>
+          ) : (
+            <DataTable
+              columns={columns}
+              data={anunciosData}
+              onView={handleView}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          )}
         </div>
       </main>
 
