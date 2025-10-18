@@ -10,6 +10,38 @@ const api = axios.create({
   },
 });
 
+// Interceptor para adicionar token em todas as requisições
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Interceptor para tratar erros de autenticação
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Token expirado ou inválido
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('user_data');
+      
+      // Redirecionar para login
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/';
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 // Interfaces TypeScript
 export interface LoginRequest {
   email: string;
@@ -19,6 +51,7 @@ export interface LoginRequest {
 export interface LoginResponse {
   access_token: string;
   token_type: string;
+  expires_in: number;
   user_id: number;
   user_name: string;
   user_type: 'ADM' | 'sindico';
@@ -106,7 +139,16 @@ export const authService = {
   // Login
   login: async (credentials: LoginRequest): Promise<LoginResponse> => {
     try {
-      const response = await api.post<LoginResponse>('/login', credentials);
+      // OAuth2 requires application/x-www-form-urlencoded format
+      const formData = new URLSearchParams();
+      formData.append('username', credentials.email);
+      formData.append('password', credentials.senha);
+      
+      const response = await api.post<LoginResponse>('/login', formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
       
       // Armazenar token no localStorage
       if (response.data.access_token) {

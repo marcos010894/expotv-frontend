@@ -113,10 +113,20 @@ export default function EditarAvisoPage({ avisoId, onBack, onSuccess, onError }:
     }
   };
 
+  const setExpirationDate = (days: number) => {
+    const date = new Date();
+    date.setDate(date.getDate() + days);
+    const formattedDate = date.toISOString().slice(0, 16);
+    setFormData(prev => ({
+      ...prev,
+      data_expiracao: formattedDate
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.nome.trim() || !formData.mensagem.trim() || 
+    if (!formData.nome.trim() || 
         formData.condominios_ids.length === 0 || !formData.status) {
       onError('Preencha todos os campos obrigatórios');
       return;
@@ -203,7 +213,7 @@ export default function EditarAvisoPage({ avisoId, onBack, onSuccess, onError }:
           </div>
 
           <div className="form-group">
-            <label htmlFor="mensagem">Mensagem *</label>
+            <label htmlFor="mensagem">Mensagem</label>
             <textarea
               id="mensagem"
               name="mensagem"
@@ -211,12 +221,63 @@ export default function EditarAvisoPage({ avisoId, onBack, onSuccess, onError }:
               onChange={handleChange}
               placeholder="Digite a mensagem completa do aviso"
               rows={6}
-              required
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="data_expiracao">Data de Expiração</label>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+              <label htmlFor="data_expiracao">Data de Expiração</label>
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <button
+                  type="button"
+                  onClick={() => setExpirationDate(7)}
+                  style={{
+                    padding: '0.3rem 0.6rem',
+                    fontSize: '0.75rem',
+                    backgroundColor: '#17a2b8',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    fontWeight: '500'
+                  }}
+                >
+                  +7 dias
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setExpirationDate(15)}
+                  style={{
+                    padding: '0.3rem 0.6rem',
+                    fontSize: '0.75rem',
+                    backgroundColor: '#17a2b8',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    fontWeight: '500'
+                  }}
+                >
+                  +15 dias
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setExpirationDate(30)}
+                  style={{
+                    padding: '0.3rem 0.6rem',
+                    fontSize: '0.75rem',
+                    backgroundColor: '#17a2b8',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    fontWeight: '500'
+                  }}
+                >
+                  +30 dias
+                </button>
+              </div>
+            </div>
             <input
               type="datetime-local"
               id="data_expiracao"
