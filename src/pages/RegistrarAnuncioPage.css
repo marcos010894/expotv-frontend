@@ -1,0 +1,148 @@
+/* Importando estilos base da página de registro */
+
+@import url('./RegistrarSindicoPage.css');
+
+/* Garantindo overflow no card branco */
+
+.page-card {
+    overflow: auto;
+    max-height: calc(100vh - 120px);
+}
+
+
+/* Estilos específicos para anúncios */
+
+.condominiums-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 12px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 12px;
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background-color: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.checkbox-item:hover {
+    background-color: #f0f0f0;
+    border-color: #007bff;
+}
+
+.checkbox-item input[type="checkbox"] {
+    margin: 0;
+    accent-color: #007bff;
+}
+
+.checkbox-item span {
+    font-size: 14px;
+    color: #333;
+    user-select: none;
+}
+
+
+/* Área de upload de imagem */
+
+.image-upload-area {
+    margin-top: 8px;
+}
+
+.upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    border: 2px dashed #007bff;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.upload-placeholder:hover {
+    background-color: #e9ecef;
+    border-color: #0056b3;
+}
+
+.upload-icon {
+    font-size: 24px;
+    color: #007bff;
+    margin-bottom: 12px;
+}
+
+.upload-placeholder p {
+    margin: 0 0 4px 0;
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+}
+
+.upload-placeholder small {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.image-preview {
+    position: relative;
+    display: inline-block;
+    max-width: 300px;
+}
+
+.image-preview img {
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #e1e5e9;
+}
+
+.remove-image-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.remove-image-btn:hover {
+    background-color: #c82333;
+}
+
+
+/* Estilo específico para o grupo de upload de imagem */
+
+.image-upload-group {
+    grid-column: 1 / -1;
+    /* Ocupa toda a largura disponível */
+    margin: 20px 0;
+}
+
+.image-upload-group label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 12px;
+    display: block;
+}

@@ -1,0 +1,34 @@
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 56px);
+  background: #DDDDE2;
+  padding: 40px;
+  box-sizing: border-box;
+  align-items: center;
+}
+
+.main-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 30px 0;
+  text-align: left;
+  width: 100%;
+  max-width: 600px;
+}
+
+.main-card {
+  background: #fff !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 24px rgba(44, 61, 142, 0.12) !important;
+  padding: 60px !important;
+  width: 100% !important;
+  max-width: 800px !important;
+  min-height: 400px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+}

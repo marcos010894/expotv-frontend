@@ -1,0 +1,31 @@
+/* Importando estilos base da página de síndicos */
+
+@import url('./SindicosPage.css');
+
+/* Garantindo overflow no card branco */
+
+.page-card {
+    overflow: auto;
+    max-height: calc(100vh - 120px);
+}
+
+
+/* Estilos específicos para avisos */
+
+.avisos-page .status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.avisos-page .status.active {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.avisos-page .status.inactive {
+    background-color: #fef2f2;
+    color: #dc2626;
+}

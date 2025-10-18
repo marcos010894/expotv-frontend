@@ -1,0 +1,10 @@
+/* Importando estilos base */
+
+@import url('./RegistrarAnuncioPage.css');
+
+/* Garantindo overflow no card branco */
+
+.page-card {
+    overflow: auto;
+    max-height: calc(100vh - 120px);
+}

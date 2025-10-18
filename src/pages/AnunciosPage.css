@@ -1,0 +1,10 @@
+/* Importando estilos base da página de síndicos */
+
+@import url('./SindicosPage.css');
+
+/* Garantindo overflow no card branco */
+
+.page-card {
+    overflow: auto;
+    max-height: calc(100vh - 120px);
+}

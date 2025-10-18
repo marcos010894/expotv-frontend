@@ -1,0 +1,79 @@
+/* Mesmo estilo das outras páginas */
+
+.sindicos-page {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: calc(100vh - 56px);
+    background: #DDDDE2;
+    padding: 60px 30px;
+    box-sizing: border-box;
+}
+
+.page-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(44, 61, 142, 0.08);
+    padding: 24px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.page-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #374151;
+    margin: 0;
+}
+
+.new-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #2C3D8E 0%, #1f2b66 100%);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(44, 61, 142, 0.25);
+}
+
+.new-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(44, 61, 142, 0.35);
+}
+
+.btn-icon {
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .sindicos-page {
+        padding: 30px 16px;
+        justify-content: flex-start;
+    }
+    .page-header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
+    }
+    .new-btn {
+        justify-content: center;
+    }
+}
