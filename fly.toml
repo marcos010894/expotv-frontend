@@ -3,6 +3,9 @@ app = "expotv-frontend"
 primary_region = "gru"
 
 [build]
+  builder = "heroku/buildpacks:20"
+  buildpacks = ["heroku/nodejs"]
+  
   [build.env]
     NODE_VERSION = "20"
 
