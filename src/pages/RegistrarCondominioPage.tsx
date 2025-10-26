@@ -99,14 +99,14 @@ export default function RegistrarCondominioPage({ onBack, onSuccess, onError }: 
             <FiArrowLeft />
             Voltar
           </button>
-          <h1 className="page-title">Registrar Condominio</h1>
+          <h1 className="page-title">Registrar Condomínio</h1>
           <div></div>
         </div>
         
         <form onSubmit={handleSubmit} className="register-form">
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="nome">Nome do Condominio *</label>
+              <label htmlFor="nome">Nome do Condomínio *</label>
               <input
                 type="text"
                 id="nome"

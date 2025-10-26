@@ -1,5 +1,5 @@
 import './TVsPage.css';
-import { FiPlus } from 'react-icons/fi';
+import { FiPlus, FiSearch } from 'react-icons/fi';
 import { useState } from 'react';
 import DataTable from '../components/DataTable';
 import ConfirmModal from '../components/ConfirmModal';
@@ -25,6 +25,7 @@ const columns = [
 
 export default function TVsPage({ onRegister, onEdit, onView, onNotification }: TVsPageProps) {
   const { tvs, condominios, loading, error, deleteTV } = useTVs();
+  const [searchTerm, setSearchTerm] = useState('');
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
     tv: TV | null;
@@ -46,6 +47,18 @@ export default function TVsPage({ onRegister, onEdit, onView, onNotification }: 
       data_registro: new Date(tv.data_registro).toLocaleDateString('pt-BR'),
       status: tv.status === 'online' ? 'Online' : 'Offline'
     };
+  });
+
+  // Filtrar TVs baseado na pesquisa
+  const filteredTVs = tvsData.filter(tv => {
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      tv.nome.toLowerCase().includes(searchLower) ||
+      tv.codigo_conexao.toLowerCase().includes(searchLower) ||
+      tv.condominio_nome.toLowerCase().includes(searchLower) ||
+      tv.template.toLowerCase().includes(searchLower) ||
+      tv.status.toLowerCase().includes(searchLower)
+    );
   });
 
   const handleEdit = (tv: TV) => {
@@ -116,14 +129,42 @@ export default function TVsPage({ onRegister, onEdit, onView, onNotification }: 
             </button>
           </div>
           
-          {tvsData.length === 0 ? (
+          {/* Barra de Pesquisa */}
+          <div className="search-bar">
+            <FiSearch className="search-icon" />
+            <input
+              type="text"
+              placeholder="Pesquisar por nome, código, condomínio, template ou status..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+            {searchTerm && (
+              <button 
+                className="search-clear"
+                onClick={() => setSearchTerm('')}
+                aria-label="Limpar pesquisa"
+              >
+                ×
+              </button>
+            )}
+          </div>
+
+          {/* Contador de resultados */}
+          {searchTerm && (
+            <div className="search-results-count">
+              {filteredTVs.length} {filteredTVs.length === 1 ? 'resultado encontrado' : 'resultados encontrados'}
+            </div>
+          )}
+          
+          {filteredTVs.length === 0 ? (
             <div className="empty-state">
-              <p>Nenhuma TV encontrada.</p>
+              <p>{searchTerm ? 'Nenhuma TV encontrada com esse filtro.' : 'Nenhuma TV encontrada.'}</p>
             </div>
           ) : (
             <DataTable
               columns={columns}
-              data={tvsData}
+              data={filteredTVs}
               onView={handleView}
               onEdit={handleEdit}
               onDelete={handleDelete}

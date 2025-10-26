@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FiX, FiCamera, FiUpload } from 'react-icons/fi';
+import { FiX, FiCamera, FiUpload, FiTrash2 } from 'react-icons/fi';
 import './PhotoUploadModal.css';
 import ImageUpload from './ImageUpload';
 
@@ -7,6 +7,7 @@ interface PhotoUploadModalProps {
   isOpen: boolean;
   onClose: () => void;
   onUpload: (file: File) => Promise<void>;
+  onRemove?: () => Promise<void>;
   currentPhotoUrl?: string;
 }
 
@@ -14,6 +15,7 @@ export default function PhotoUploadModal({
   isOpen, 
   onClose, 
   onUpload,
+  onRemove,
   currentPhotoUrl 
 }: PhotoUploadModalProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -33,6 +35,21 @@ export default function PhotoUploadModal({
       onClose();
     } catch (error) {
       console.error('Erro ao fazer upload:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRemove = async () => {
+    if (!onRemove) return;
+
+    setLoading(true);
+    try {
+      await onRemove();
+      setSelectedFile(null);
+      onClose();
+    } catch (error) {
+      console.error('Erro ao remover foto:', error);
     } finally {
       setLoading(false);
     }
@@ -79,6 +96,7 @@ export default function PhotoUploadModal({
               value={selectedFile}
               placeholder="Selecione uma nova foto para seu perfil"
               accept="image/*"
+              allowVideo={false}
             />
           </div>
         </div>
@@ -92,6 +110,27 @@ export default function PhotoUploadModal({
           >
             Cancelar
           </button>
+          {onRemove && currentPhotoUrl && (
+            <button
+              type="button"
+              className="btn btn-danger"
+              onClick={handleRemove}
+              disabled={loading}
+              style={{ marginRight: 'auto' }}
+            >
+              {loading ? (
+                <>
+                  <div className="loading-spinner"></div>
+                  Removendo...
+                </>
+              ) : (
+                <>
+                  <FiTrash2 />
+                  Remover Foto
+                </>
+              )}
+            </button>
+          )}
           <button
             type="button"
             className="btn btn-primary"

@@ -105,7 +105,7 @@ export default function EditarSindicoPage({ user, onBack, onSuccess, onError }: 
             <FiArrowLeft />
             Voltar
           </button>
-          <h1 className="page-title">Editar {formData.tipo === 'sindico' ? 'Síndico' : 'Administrador'}</h1>
+          <h1 className="page-title">Editar Usuário</h1>
           <div></div>
         </div>
         

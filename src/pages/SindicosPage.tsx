@@ -95,16 +95,16 @@ export default function SindicosPage({ onRegister, onEdit, onNotification }: Sin
       <main className="sindicos-page">
         <div className="page-card">
           <div className="page-header">
-            <h1 className="page-title">Síndicos</h1>
+            <h1 className="page-title">Usuários</h1>
             <button className="new-btn" onClick={handleNewSindico}>
               <FiPlus className="btn-icon" />
-              Novo Síndico
+              Novo Usuário
             </button>
           </div>
           
           {sindicosData.length === 0 ? (
             <div className="empty-state">
-              <p>Nenhum síndico encontrado.</p>
+              <p>Nenhum usuário encontrado.</p>
             </div>
           ) : (
             <DataTable

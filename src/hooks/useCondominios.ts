@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import { condominioService, userService, type Condominio, type User } from '../services/api';
+import { condominioService, userService, tvService, anuncioService, type Condominio, type User, type TV, type Anuncio } from '../services/api';
 
 export const useCondominios = () => {
   const [condominios, setCondominios] = useState<Condominio[]>([]);
   const [sindicos, setSindicos] = useState<User[]>([]);
+  const [tvs, setTvs] = useState<TV[]>([]);
+  const [anuncios, setAnuncios] = useState<Anuncio[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,6 +28,24 @@ export const useCondominios = () => {
       setSindicos(users.filter(user => user.tipo === 'sindico'));
     } catch (err) {
       console.error('Erro ao carregar síndicos:', err);
+    }
+  };
+
+  const fetchTVs = async () => {
+    try {
+      const data = await tvService.getTVs();
+      setTvs(data);
+    } catch (err) {
+      console.error('Erro ao carregar TVs:', err);
+    }
+  };
+
+  const fetchAnuncios = async () => {
+    try {
+      const data = await anuncioService.getAnuncios();
+      setAnuncios(data);
+    } catch (err) {
+      console.error('Erro ao carregar anúncios:', err);
     }
   };
 
@@ -73,11 +93,15 @@ export const useCondominios = () => {
   useEffect(() => {
     fetchCondominios();
     fetchSindicos();
+    fetchTVs();
+    fetchAnuncios();
   }, []);
 
   return {
     condominios,
     sindicos,
+    tvs,
+    anuncios,
     loading,
     error,
     refetch: fetchCondominios,

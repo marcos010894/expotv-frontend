@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import './DetalhesAnuncioPage.css';
-import { FiArrowLeft, FiCalendar, FiPhone, FiUser, FiHome, FiImage } from 'react-icons/fi';
+import { FiArrowLeft, FiCalendar, FiPhone, FiUser, FiHome, FiImage, FiEye } from 'react-icons/fi';
 import { useAnuncios } from '../hooks/useAnuncios';
 import type { Anuncio } from '../services/api';
+import AnuncioPreviewModal from '../components/AnuncioPreviewModal';
 
 interface DetalhesAnuncioPageProps {
   anuncio: Anuncio;
@@ -10,6 +12,7 @@ interface DetalhesAnuncioPageProps {
 
 export default function DetalhesAnuncioPage({ anuncio, onBack }: DetalhesAnuncioPageProps) {
   const { getCondominiosNames } = useAnuncios();
+  const [showPreview, setShowPreview] = useState(false);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('pt-BR');
@@ -26,6 +29,16 @@ export default function DetalhesAnuncioPage({ anuncio, onBack }: DetalhesAnuncio
             Voltar
           </button>
           <h1 className="page-title">Detalhes do Anuncio</h1>
+          {anuncio.archive_url && (
+            <button 
+              className="btn btn-info"
+              onClick={() => setShowPreview(true)}
+              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
+              <FiEye size={18} />
+              Pré-visualizar na TV
+            </button>
+          )}
         </div>
 
         <div className="details-content">
@@ -120,6 +133,15 @@ export default function DetalhesAnuncioPage({ anuncio, onBack }: DetalhesAnuncio
           )}
         </div>
       </div>
+      
+      {/* Modal de Preview */}
+      <AnuncioPreviewModal
+        isOpen={showPreview}
+        onClose={() => setShowPreview(false)}
+        imageUrl={anuncio.archive_url}
+        nome={anuncio.nome}
+        fileType={undefined}
+      />
     </main>
   );
 }

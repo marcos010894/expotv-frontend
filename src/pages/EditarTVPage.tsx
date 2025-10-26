@@ -66,11 +66,10 @@ export function EditarTVPage({ tvId, onBack }: Props) {
         
         setLoading(true);
         try {
+            // Não envia o status e código_conexao - são controlados pelo sistema
             await updateTV(tvId, {
                 nome: formData.nome,
                 condominio_id: parseInt(formData.condominio_id),
-                codigo_conexao: formData.codigo_conexao,
-                status: formData.status,
                 template: formData.template
             });
             
@@ -155,17 +154,31 @@ export function EditarTVPage({ tvId, onBack }: Props) {
                                         value={formData.codigo_conexao}
                                         onChange={handleInputChange}
                                         placeholder="Código de 5 dígitos"
-                                        required
+                                        disabled
                                         maxLength={5}
+                                        style={{ 
+                                            backgroundColor: '#f5f5f5', 
+                                            cursor: 'not-allowed',
+                                            color: '#666'
+                                        }}
                                     />
                                     <button 
                                         type="button" 
                                         onClick={generateConnectionCode}
                                         className="generate-btn"
+                                        disabled
+                                        style={{ 
+                                            backgroundColor: '#d0d0d0', 
+                                            cursor: 'not-allowed',
+                                            opacity: '0.6'
+                                        }}
                                     >
                                         Gerar
                                     </button>
                                 </div>
+                                <small style={{ color: '#666', fontSize: '12px', marginTop: '4px', display: 'block' }}>
+                                    O código de conexão não pode ser alterado após a criação.
+                                </small>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="template">Template</label>
@@ -178,7 +191,6 @@ export function EditarTVPage({ tvId, onBack }: Props) {
                                 >
                                     <option value="Template 1">Template 1</option>
                                     <option value="Template 2">Template 2</option>
-                                    <option value="Template 3">Template 3</option>
                                 </select>
                             </div>
                         </div>
@@ -191,11 +203,19 @@ export function EditarTVPage({ tvId, onBack }: Props) {
                                     name="status"
                                     value={formData.status}
                                     onChange={handleInputChange}
-                                    required
+                                    disabled
+                                    style={{ 
+                                        backgroundColor: '#f5f5f5', 
+                                        cursor: 'not-allowed',
+                                        color: '#666'
+                                    }}
                                 >
                                     <option value="offline">Offline</option>
                                     <option value="online">Online</option>
                                 </select>
+                                <small style={{ color: '#666', fontSize: '12px', marginTop: '4px', display: 'block' }}>
+                                    O status é controlado automaticamente pela conexão da TV.
+                                </small>
                             </div>
                         </div>
 

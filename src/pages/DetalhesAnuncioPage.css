@@ -9,6 +9,19 @@
     max-height: calc(100vh - 120px);
 }
 
+/* Page Header com botão de preview */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.page-header .btn-info {
+    margin-left: auto;
+}
+
 
 /* Estilos específicos para anúncios */
 

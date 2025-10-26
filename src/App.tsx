@@ -37,6 +37,8 @@ interface NotificationState {
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
   // Função para obter página inicial baseada no tipo de usuário
   const getInitialPage = (): Page => {
     const userData = authService.getUserData();
@@ -397,9 +399,14 @@ function App() {
       <Sidebar 
         onNavigate={(page) => setCurrentPage(page as Page)} 
         onNotification={showNotification}
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
       />
       <div className="app-main">
-        <TopBar onLogout={handleLogout} />
+        <TopBar 
+          onLogout={handleLogout}
+          onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        />
         {renderContent()}
       </div>
       

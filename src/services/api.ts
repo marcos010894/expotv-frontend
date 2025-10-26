@@ -500,7 +500,7 @@ export const anuncioService = {
         formData.append('image', anuncioData.image);
       }
 
-      const response = await api.post<Anuncio>('/anuncios/', formData, {
+      const response = await api.post<Anuncio>('/anuncios', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -595,14 +595,14 @@ export const avisoService = {
       }
       
       if (avisoData.image) {
-        formData.append('image', avisoData.image);
+        formData.append('media', avisoData.image);
       }
 
       if (avisoData.video) {
         formData.append('video', avisoData.video);
       }
 
-      const response = await api.post<Aviso>('/avisos/', formData, {
+      const response = await api.post<Aviso>('/avisos', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import './RegistrarAnuncioPage.css';
-import { FiArrowLeft } from 'react-icons/fi';
+import { FiArrowLeft, FiEye } from 'react-icons/fi';
 import { useAnuncios } from '../hooks/useAnuncios';
 import { useCondominios } from '../hooks/useCondominios';
 import ImageUpload from '../components/ImageUpload';
+import AnuncioPreviewModal from '../components/AnuncioPreviewModal';
 
 interface RegistrarAnuncioPageProps {
   onBack: () => void;
@@ -26,6 +27,19 @@ interface FormData {
 export default function RegistrarAnuncioPage({ onBack, onSuccess, onError }: RegistrarAnuncioPageProps) {
   const { createAnuncio } = useAnuncios();
   const { condominios } = useCondominios();
+  
+  // Função para calcular o status baseado na data
+  const getStatusFromDate = (dataExpiracao: string): 'ativo' | 'inativo' => {
+    if (!dataExpiracao) return 'ativo';
+    
+    const dataExp = new Date(dataExpiracao);
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    dataExp.setHours(0, 0, 0, 0);
+    
+    return dataExp >= hoje ? 'ativo' : 'inativo';
+  };
+  
   const [formData, setFormData] = useState<FormData>({
     nome: '',
     nome_anunciante: '',
@@ -37,6 +51,7 @@ export default function RegistrarAnuncioPage({ onBack, onSuccess, onError }: Reg
     tempo_exibicao: 10,
   });
   const [loading, setLoading] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
 
   const handleImageSelect = (file: File | null) => {
     setFormData(prev => ({
@@ -47,10 +62,25 @@ export default function RegistrarAnuncioPage({ onBack, onSuccess, onError }: Reg
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: name === 'tempo_exibicao' ? Number(value) : value
-    }));
+    
+    setFormData(prev => {
+      const updated = {
+        ...prev,
+        [name]: name === 'tempo_exibicao' ? Number(value) : value
+      };
+      
+      // Atualizar status automaticamente baseado na data de expiração
+      if (name === 'data_expiracao' && value) {
+        const dataExpiracao = new Date(value);
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+        dataExpiracao.setHours(0, 0, 0, 0);
+        
+        updated.status = dataExpiracao >= hoje ? 'ativo' : 'inativo';
+      }
+      
+      return updated;
+    });
   };
 
   const handleCondominiumChange = (condominiumId: number, checked: boolean) => {
@@ -92,6 +122,17 @@ export default function RegistrarAnuncioPage({ onBack, onSuccess, onError }: Reg
       return;
     }
 
+    // Validar se a data de expiração não está no passado
+    const dataExpiracao = new Date(formData.data_expiracao);
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    dataExpiracao.setHours(0, 0, 0, 0);
+    
+    if (dataExpiracao < hoje) {
+      onError('A data de expiração não pode ser anterior à data atual');
+      return;
+    }
+
     setLoading(true);
     
     try {
@@ -124,36 +165,46 @@ export default function RegistrarAnuncioPage({ onBack, onSuccess, onError }: Reg
             <FiArrowLeft />
             Voltar
           </button>
-          <h1 className="page-title">Cadastrar Novo Anuncio</h1>
+          <h1 className="page-title">Cadastrar Novo Anúncio</h1>
           <div></div>
         </div>
         
         <form onSubmit={handleSubmit} className="register-form">
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="nome">Nome do Anuncio *</label>
+              <label htmlFor="nome">Nome do Anúncio *</label>
               <input
                 type="text"
                 id="nome"
                 name="nome"
                 value={formData.nome}
                 onChange={handleChange}
-                placeholder="Digite o nome do anuncio"
+                placeholder="Digite o nome do anúncio"
                 required
               />
             </div>
             <div className="form-group">
-              <label htmlFor="status">Status *</label>
+              <label htmlFor="status">Status</label>
               <select
                 id="status"
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
-                required
+                disabled
+                style={{ 
+                  backgroundColor: '#f5f5f5', 
+                  cursor: 'not-allowed',
+                  color: '#666'
+                }}
               >
                 <option value="ativo">Ativo</option>
                 <option value="inativo">Inativo</option>
               </select>
+              <small style={{ color: '#666', fontSize: '12px', marginTop: '4px', display: 'block' }}>
+                {formData.data_expiracao 
+                  ? `Status definido automaticamente pela data de expiração (${formData.status === 'ativo' ? 'Data válida' : 'Data vencida'})`
+                  : 'O status será definido automaticamente baseado na data de expiração'}
+              </small>
             </div>
           </div>
 
@@ -186,15 +237,19 @@ export default function RegistrarAnuncioPage({ onBack, onSuccess, onError }: Reg
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="data_expiracao">Data de Expiracao *</label>
+              <label htmlFor="data_expiracao">Data de Expiração *</label>
               <input
                 type="date"
                 id="data_expiracao"
                 name="data_expiracao"
                 value={formData.data_expiracao}
                 onChange={handleChange}
+                min={new Date().toISOString().split('T')[0]}
                 required
               />
+              <small style={{ color: '#666', fontSize: '12px', marginTop: '4px', display: 'block' }}>
+                A data deve ser igual ou posterior à data atual
+              </small>
             </div>
 
             <div className="form-group">
@@ -213,11 +268,12 @@ export default function RegistrarAnuncioPage({ onBack, onSuccess, onError }: Reg
           </div>
 
           <div className="form-group image-upload-group">
-            <label>Imagem do Anúncio</label>
+            <label>Imagem ou Vídeo do Anúncio</label>
             <ImageUpload 
               onImageSelect={handleImageSelect}
               value={formData.image}
-              placeholder="Clique para selecionar uma imagem para o anúncio ou arraste aqui"
+              placeholder="Clique para selecionar uma imagem ou vídeo para o anúncio ou arraste aqui"
+              allowVideo={true}
             />
           </div>
 
@@ -291,6 +347,16 @@ export default function RegistrarAnuncioPage({ onBack, onSuccess, onError }: Reg
               Cancelar
             </button>
             <button
+              type="button"
+              onClick={() => setShowPreview(true)}
+              className="btn btn-info"
+              disabled={!formData.image}
+              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
+              <FiEye size={18} />
+              Pré-visualizar
+            </button>
+            <button
               type="submit"
               className="btn btn-primary"
               disabled={loading}
@@ -300,6 +366,15 @@ export default function RegistrarAnuncioPage({ onBack, onSuccess, onError }: Reg
           </div>
         </form>
       </div>
+      
+      {/* Modal de Preview */}
+      <AnuncioPreviewModal
+        isOpen={showPreview}
+        onClose={() => setShowPreview(false)}
+        imageUrl={formData.image ? URL.createObjectURL(formData.image) : undefined}
+        nome={formData.nome || 'Anúncio sem nome'}
+        fileType={formData.image?.type}
+      />
     </main>
   );
 }

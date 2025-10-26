@@ -133,6 +133,21 @@
     background-color: #545b62;
 }
 
+.btn-info {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.btn-info:hover:not(:disabled) {
+    background-color: #138496;
+}
+
+.btn-info:disabled {
+    background-color: #85d0da;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
 @media (max-width: 768px) {
     .sindicos-page {
         padding: 30px 16px;

@@ -26,6 +26,18 @@ export default function RegistrarAvisoPage({ onBack, onSuccess, onError }: Regis
   const { createAviso } = useAvisos();
   const condominios = authService.getUserCondominios();
   
+  // Função para calcular o status baseado na data
+  const getStatusFromDate = (dataExpiracao: string): string => {
+    if (!dataExpiracao) return 'ativo';
+    
+    const dataExp = new Date(dataExpiracao);
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    dataExp.setHours(0, 0, 0, 0);
+    
+    return dataExp >= hoje ? 'ativo' : 'inativo';
+  };
+  
   const [formData, setFormData] = useState<FormData>({
     nome: '',
     condominios_ids: [],
@@ -40,10 +52,25 @@ export default function RegistrarAvisoPage({ onBack, onSuccess, onError }: Regis
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    
+    setFormData(prev => {
+      const updated = {
+        ...prev,
+        [name]: value
+      };
+      
+      // Atualizar status automaticamente baseado na data de expiração
+      if (name === 'data_expiracao' && value) {
+        const dataExpiracao = new Date(value);
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+        dataExpiracao.setHours(0, 0, 0, 0);
+        
+        updated.status = dataExpiracao >= hoje ? 'ativo' : 'inativo';
+      }
+      
+      return updated;
+    });
   };
 
   const handleCondominiumChange = (condominiumId: number, checked: boolean) => {
@@ -112,6 +139,19 @@ export default function RegistrarAvisoPage({ onBack, onSuccess, onError }: Regis
       return;
     }
 
+    // Validar se a data de expiração não está no passado (se informada)
+    if (formData.data_expiracao) {
+      const dataExpiracao = new Date(formData.data_expiracao);
+      const hoje = new Date();
+      hoje.setHours(0, 0, 0, 0);
+      dataExpiracao.setHours(0, 0, 0, 0);
+      
+      if (dataExpiracao < hoje) {
+        onError('A data de expiração não pode ser anterior à data atual');
+        return;
+      }
+    }
+
     setLoading(true);
     
     try {
@@ -167,17 +207,28 @@ export default function RegistrarAvisoPage({ onBack, onSuccess, onError }: Regis
             </div>
 
             <div className="form-group">
-              <label htmlFor="status">Status *</label>
+              <label htmlFor="status">Status</label>
               <select
                 id="status"
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
+                disabled
+                style={{ 
+                  backgroundColor: '#f5f5f5', 
+                  cursor: 'not-allowed',
+                  color: '#666'
+                }}
               >
                 <option value="ativo">Ativo</option>
                 <option value="inativo">Inativo</option>
                 <option value="expirado">Expirado</option>
               </select>
+              <small style={{ color: '#666', fontSize: '12px', marginTop: '4px', display: 'block' }}>
+                {formData.data_expiracao 
+                  ? `Status definido automaticamente pela data de expiração (${formData.status === 'ativo' ? 'Data válida' : 'Data vencida'})`
+                  : 'O status será definido automaticamente baseado na data de expiração'}
+              </small>
             </div>
           </div>
 
@@ -253,7 +304,11 @@ export default function RegistrarAvisoPage({ onBack, onSuccess, onError }: Regis
               name="data_expiracao"
               value={formData.data_expiracao}
               onChange={handleChange}
+              min={new Date().toISOString().slice(0, 16)}
             />
+            <small style={{ color: '#666', fontSize: '12px', marginTop: '4px', display: 'block' }}>
+              A data deve ser igual ou posterior à data atual
+            </small>
           </div>
 
           <div className="form-group image-upload-group">

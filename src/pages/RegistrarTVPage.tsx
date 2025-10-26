@@ -149,7 +149,6 @@ export default function RegistrarTVPage({ onBack, onSuccess, onError }: Props) {
                                 >
                                     <option value="Template 1">Template 1</option>
                                     <option value="Template 2">Template 2</option>
-                                    <option value="Template 3">Template 3</option>
                                 </select>
                             </div>
                         </div>
@@ -162,11 +161,19 @@ export default function RegistrarTVPage({ onBack, onSuccess, onError }: Props) {
                                     name="status"
                                     value={formData.status}
                                     onChange={handleInputChange}
-                                    required
+                                    disabled
+                                    style={{ 
+                                        backgroundColor: '#f5f5f5', 
+                                        cursor: 'not-allowed',
+                                        color: '#666'
+                                    }}
                                 >
                                     <option value="offline">Offline</option>
                                     <option value="online">Online</option>
                                 </select>
+                                <small style={{ color: '#666', fontSize: '12px', marginTop: '4px', display: 'block' }}>
+                                    A TV será criada como offline. O status mudará automaticamente quando a TV se conectar.
+                                </small>
                             </div>
                         </div>
 

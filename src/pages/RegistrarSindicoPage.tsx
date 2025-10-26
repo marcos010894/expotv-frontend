@@ -73,7 +73,7 @@ export default function RegistrarSindicoPage({ onBack, onSuccess, onError }: Reg
             <FiArrowLeft />
             Voltar
           </button>
-          <h1 className="page-title">Registrar {formData.tipo === 'sindico' ? 'Síndico' : 'Administrador'}</h1>
+          <h1 className="page-title">Registrar Usuário</h1>
           <div></div>
         </div>
         

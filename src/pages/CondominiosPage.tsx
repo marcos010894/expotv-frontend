@@ -15,15 +15,17 @@ interface CondominiosPageProps {
 
 const columns = [
   { key: 'id', title: 'ID', width: '60px' },
-  { key: 'nome', title: 'Nome', width: '200px' },
-  { key: 'localizacao', title: 'Localização', width: '180px' },
+  { key: 'nome', title: 'Nome', width: '180px' },
+  { key: 'localizacao', title: 'Localização', width: '150px' },
   { key: 'cep', title: 'CEP', width: '100px' },
-  { key: 'sindico_nome', title: 'Síndico', width: '150px' },
-  { key: 'data_registro', title: 'Data de Registro', width: '140px' }
+  { key: 'sindico_nome', title: 'Síndico', width: '140px' },
+  { key: 'qtd_tvs', title: 'TVs', width: '70px' },
+  { key: 'qtd_anuncios', title: 'Anúncios', width: '90px' },
+  { key: 'data_registro', title: 'Data Registro', width: '120px' }
 ];
 
 export default function CondominiosPage({ onRegister, onEdit, onView, onNotification }: CondominiosPageProps) {
-  const { condominios, sindicos, loading, error, deleteCondominio } = useCondominios();
+  const { condominios, sindicos, tvs, anuncios, loading, error, deleteCondominio } = useCondominios();
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
     condominio: Condominio | null;
@@ -32,12 +34,24 @@ export default function CondominiosPage({ onRegister, onEdit, onView, onNotifica
     condominio: null
   });
 
-  // Mapear dados dos condominios com nome do síndico
+  // Mapear dados dos condominios com nome do síndico e contagens
   const condominiosData = condominios.map(condominio => {
     const sindico = sindicos.find(s => s.id === condominio.sindico_id);
+    
+    // Contar TVs do condomínio
+    const qtd_tvs = tvs.filter(tv => tv.condominio_id === condominio.id).length;
+    
+    // Contar anúncios do condomínio
+    const qtd_anuncios = anuncios.filter(anuncio => {
+      const condominiosIds = anuncio.condominios_ids.split(',').map(id => parseInt(id.trim()));
+      return condominiosIds.includes(condominio.id);
+    }).length;
+    
     return {
       ...condominio,
       sindico_nome: sindico?.nome || 'N/A',
+      qtd_tvs: qtd_tvs.toString(),
+      qtd_anuncios: qtd_anuncios.toString(),
       data_registro: new Date(condominio.data_registro).toLocaleDateString('pt-BR'),
       cep: condominio.cep.replace(/(\d{5})(\d{3})/, '$1-$2') // Formatar CEP
     };
@@ -104,10 +118,10 @@ export default function CondominiosPage({ onRegister, onEdit, onView, onNotifica
       <main className="sindicos-page">
         <div className="page-card">
           <div className="page-header">
-            <h1 className="page-title">Condominios</h1>
+            <h1 className="page-title">Condomínios</h1>
             <button className="new-btn" onClick={handleNewCondominio}>
               <FiPlus className="btn-icon" />
-              Novo Condominio
+              Novo Condomínio
             </button>
           </div>
           

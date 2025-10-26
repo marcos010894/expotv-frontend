@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import './EditarAnuncioPage.css';
-import { FiArrowLeft } from 'react-icons/fi';
+import { FiArrowLeft, FiEye } from 'react-icons/fi';
 import { useAnuncios } from '../hooks/useAnuncios';
 import { useCondominios } from '../hooks/useCondominios';
 import { type Anuncio } from '../services/api';
+import AnuncioPreviewModal from '../components/AnuncioPreviewModal';
 
 interface EditarAnuncioPageProps {
   anuncio: Anuncio;
@@ -27,6 +28,7 @@ export default function EditarAnuncioPage({ anuncio, onBack, onSuccess, onError 
   const { updateAnuncio } = useAnuncios();
   const { condominios } = useCondominios();
   const [loading, setLoading] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     nome: '',
     nome_anunciante: '',
@@ -44,13 +46,22 @@ export default function EditarAnuncioPage({ anuncio, onBack, onSuccess, onError 
         ? anuncio.condominios_ids.split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id))
         : anuncio.condominios_ids;
 
+      const dataExpiracao = anuncio.data_expiracao.split('T')[0];
+      
+      // Calcular status baseado na data
+      const dataExp = new Date(dataExpiracao);
+      const hoje = new Date();
+      hoje.setHours(0, 0, 0, 0);
+      dataExp.setHours(0, 0, 0, 0);
+      const statusCalculado = dataExp >= hoje ? 'ativo' : 'inativo';
+
       setFormData({
         nome: anuncio.nome,
         nome_anunciante: anuncio.nome_anunciante,
         numero_anunciante: anuncio.numero_anunciante,
         condominios_ids: Array.isArray(condominiosIds) ? condominiosIds : [],
-        data_expiracao: anuncio.data_expiracao.split('T')[0], // Formatando para input date
-        status: anuncio.status,
+        data_expiracao: dataExpiracao,
+        status: statusCalculado, // Usar status calculado, não o do banco
         archive_url: anuncio.archive_url,
         tempo_exibicao: anuncio.tempo_exibicao || 10,
       });
@@ -59,10 +70,25 @@ export default function EditarAnuncioPage({ anuncio, onBack, onSuccess, onError 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: name === 'tempo_exibicao' ? Number(value) : value
-    }));
+    
+    setFormData(prev => {
+      const updated = {
+        ...prev,
+        [name]: name === 'tempo_exibicao' ? Number(value) : value
+      };
+      
+      // Atualizar status automaticamente baseado na data de expiração
+      if (name === 'data_expiracao' && value) {
+        const dataExpiracao = new Date(value);
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+        dataExpiracao.setHours(0, 0, 0, 0);
+        
+        updated.status = dataExpiracao >= hoje ? 'ativo' : 'inativo';
+      }
+      
+      return updated;
+    });
   };
 
   const handleCondominiumChange = (condominiumId: number, checked: boolean) => {
@@ -104,6 +130,17 @@ export default function EditarAnuncioPage({ anuncio, onBack, onSuccess, onError 
       return;
     }
 
+    // Validar se a data de expiração não está no passado
+    const dataExpiracao = new Date(formData.data_expiracao);
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    dataExpiracao.setHours(0, 0, 0, 0);
+    
+    if (dataExpiracao < hoje) {
+      onError('A data de expiração não pode ser anterior à data atual');
+      return;
+    }
+
     setLoading(true);
     
     try {
@@ -135,14 +172,14 @@ export default function EditarAnuncioPage({ anuncio, onBack, onSuccess, onError 
             <FiArrowLeft />
             Voltar
           </button>
-          <h1 className="page-title">Editar Anuncio</h1>
+          <h1 className="page-title">Editar Anúncio</h1>
           <div></div>
         </div>
         
         <form onSubmit={handleSubmit} className="register-form">
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="nome">Nome do Anuncio *</label>
+              <label htmlFor="nome">Nome do Anúncio *</label>
               <input
                 type="text"
                 id="nome"
@@ -154,17 +191,27 @@ export default function EditarAnuncioPage({ anuncio, onBack, onSuccess, onError 
               />
             </div>
             <div className="form-group">
-              <label htmlFor="status">Status *</label>
+              <label htmlFor="status">Status</label>
               <select
                 id="status"
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
-                required
+                disabled
+                style={{ 
+                  backgroundColor: '#f5f5f5', 
+                  cursor: 'not-allowed',
+                  color: '#666'
+                }}
               >
                 <option value="ativo">Ativo</option>
                 <option value="inativo">Inativo</option>
               </select>
+              <small style={{ color: '#666', fontSize: '12px', marginTop: '4px', display: 'block' }}>
+                {formData.data_expiracao 
+                  ? `Status definido automaticamente pela data de expiração (${formData.status === 'ativo' ? 'Data válida' : 'Data vencida'})`
+                  : 'O status será definido automaticamente baseado na data de expiração'}
+              </small>
             </div>
           </div>
 
@@ -197,15 +244,19 @@ export default function EditarAnuncioPage({ anuncio, onBack, onSuccess, onError 
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="data_expiracao">Data de Expiracao *</label>
+              <label htmlFor="data_expiracao">Data de Expiração *</label>
               <input
                 type="date"
                 id="data_expiracao"
                 name="data_expiracao"
                 value={formData.data_expiracao}
                 onChange={handleChange}
+                min={new Date().toISOString().split('T')[0]}
                 required
               />
+              <small style={{ color: '#666', fontSize: '12px', marginTop: '4px', display: 'block' }}>
+                A data deve ser igual ou posterior à data atual
+              </small>
             </div>
 
             <div className="form-group">
@@ -293,6 +344,16 @@ export default function EditarAnuncioPage({ anuncio, onBack, onSuccess, onError 
               Cancelar
             </button>
             <button
+              type="button"
+              onClick={() => setShowPreview(true)}
+              className="btn btn-info"
+              disabled={!anuncio.archive_url}
+              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
+              <FiEye size={18} />
+              Pré-visualizar
+            </button>
+            <button
               type="submit"
               className="btn btn-primary"
               disabled={loading}
@@ -302,6 +363,15 @@ export default function EditarAnuncioPage({ anuncio, onBack, onSuccess, onError 
           </div>
         </form>
       </div>
+      
+      {/* Modal de Preview */}
+      <AnuncioPreviewModal
+        isOpen={showPreview}
+        onClose={() => setShowPreview(false)}
+        imageUrl={anuncio.archive_url}
+        nome={formData.nome || 'Anúncio sem nome'}
+        fileType={undefined}
+      />
     </main>
   );
 }

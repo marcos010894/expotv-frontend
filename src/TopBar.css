@@ -17,6 +17,38 @@
 
 .topbar-title {
     text-align: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.menu-toggle-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    font-size: 24px;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-toggle-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
+}
+
+.menu-toggle-btn:active {
+    transform: scale(0.95);
 }
 
 .topbar-user {
@@ -56,6 +88,9 @@
         padding: 0 16px;
         font-size: 1.25rem;
     }
+    .menu-toggle-btn {
+        display: flex;
+    }
     .logout-button {
         font-size: 16px;
         padding: 6px;
@@ -65,6 +100,13 @@
 @media (max-width: 480px) {
     .topbar {
         font-size: 1.1rem;
+        padding: 0 12px;
+    }
+    .topbar-left {
+        gap: 8px;
+    }
+    .menu-toggle-btn {
+        font-size: 20px;
     }
     .logout-button {
         font-size: 14px;

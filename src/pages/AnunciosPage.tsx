@@ -120,10 +120,10 @@ export default function AnunciosPage({ onRegister, onEdit, onView, onNotificatio
       <main className="sindicos-page">
         <div className="page-card">
           <div className="page-header">
-            <h1 className="page-title">Anuncios</h1>
+            <h1 className="page-title">Anúncios</h1>
             <button className="new-btn" onClick={handleNewAnuncio}>
               <FiPlus className="btn-icon" />
-              Novo Anuncio
+              Novo Anúncio
             </button>
           </div>
           

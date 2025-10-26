@@ -22,7 +22,13 @@ export default function DataTable({ columns, data, onEdit, onView, onDelete }: D
         <thead>
           <tr className="table-header">
             {columns.map((column) => (
-              <th key={column.key} style={{ width: column.width }}>
+              <th 
+                key={column.key} 
+                style={{ 
+                  width: column.width,
+                  textAlign: ['qtd_tvs', 'qtd_anuncios'].includes(column.key) ? 'center' : 'left'
+                }}
+              >
                 {column.title}
               </th>
             ))}
@@ -33,7 +39,15 @@ export default function DataTable({ columns, data, onEdit, onView, onDelete }: D
           {data.map((item, index) => (
             <tr key={index} className="table-row">
               {columns.map((column) => (
-                <td key={column.key} className="table-cell">
+                <td 
+                  key={column.key} 
+                  className="table-cell"
+                  data-column={column.key}
+                  style={{ 
+                    textAlign: ['qtd_tvs', 'qtd_anuncios'].includes(column.key) ? 'center' : 'left',
+                    fontWeight: ['qtd_tvs', 'qtd_anuncios'].includes(column.key) ? '600' : 'normal'
+                  }}
+                >
                   {item[column.key]}
                 </td>
               ))}
