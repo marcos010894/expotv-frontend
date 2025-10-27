@@ -29,7 +29,7 @@ export default function ForgotPasswordModal({
     setLoading(true);
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/forgot-password', {
+      const response = await fetch('https://expotv-backend.fly.dev/forgot-password', {
         method: 'POST',
         headers: {
           'accept': 'application/json',
