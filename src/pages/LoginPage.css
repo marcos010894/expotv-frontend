@@ -149,6 +149,34 @@
     opacity: 0.5;
 }
 
+.forgot-password-link {
+    text-align: right;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.link-button {
+    background: none;
+    border: none;
+    color: #2C3D8E;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 4px 0;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.link-button:hover:not(:disabled) {
+    color: #1f2b66;
+    text-decoration: underline;
+}
+
+.link-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .login-button {
     width: 100%;
     padding: 14px;

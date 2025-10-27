@@ -2,19 +2,22 @@ import { useState } from 'react';
 import { FiUser, FiLock, FiEye, FiEyeOff, FiLogIn } from 'react-icons/fi';
 import './LoginPage.css';
 import { authService, type LoginRequest } from '../services/api';
+import ForgotPasswordModal from '../components/ForgotPasswordModal';
 
 interface LoginPageProps {
   onLoginSuccess: () => void;
   onError: (message: string) => void;
+  onSuccess?: (message: string) => void;
 }
 
-export default function LoginPage({ onLoginSuccess, onError }: LoginPageProps) {
+export default function LoginPage({ onLoginSuccess, onError, onSuccess }: LoginPageProps) {
   const [formData, setFormData] = useState<LoginRequest>({
     email: '',
     senha: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -109,6 +112,17 @@ export default function LoginPage({ onLoginSuccess, onError }: LoginPageProps) {
               </div>
             </div>
 
+            <div className="forgot-password-link">
+              <button
+                type="button"
+                className="link-button"
+                onClick={() => setShowForgotPasswordModal(true)}
+                disabled={loading}
+              >
+                Esqueci a senha
+              </button>
+            </div>
+
             <button
               type="submit"
               className="login-button"
@@ -133,6 +147,17 @@ export default function LoginPage({ onLoginSuccess, onError }: LoginPageProps) {
           </div>
         </div>
       </div>
+
+      <ForgotPasswordModal
+        isOpen={showForgotPasswordModal}
+        onClose={() => setShowForgotPasswordModal(false)}
+        onSuccess={(message) => {
+          if (onSuccess) {
+            onSuccess(message);
+          }
+        }}
+        onError={onError}
+      />
     </div>
   );
 }

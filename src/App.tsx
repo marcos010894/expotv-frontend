@@ -398,6 +398,7 @@ function App() {
         <LoginPage 
           onLoginSuccess={handleLogin}
           onError={(message) => showNotification('error', message)}
+          onSuccess={(message) => showNotification('success', message)}
         />
         {notification.show && (
           <Notification
