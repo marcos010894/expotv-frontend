@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { FiArrowLeft, FiMonitor, FiImage, FiHome } from 'react-icons/fi';
+import { FiArrowLeft, FiMonitor, FiImage, FiHome, FiChevronRight } from 'react-icons/fi';
 import { condominioService } from '../services/api';
-import type { CondominioDetalhado } from '../services/api';
+import type { CondominioDetalhado, TV, Anuncio } from '../services/api';
 import Notification from '../components/Notification';
 import './DetalhesCondominioPage.css';
 
 interface Props {
     condominioId: number;
     onBack?: () => void;
+    onViewTV?: (tv: TV) => void;
+    onViewAnuncio?: (anuncio: Anuncio) => void;
 }
 
-export function DetalhesCondominioPage({ condominioId, onBack }: Props) {
+export function DetalhesCondominioPage({ condominioId, onBack, onViewTV, onViewAnuncio }: Props) {
     const [condominioDetalhado, setCondominioDetalhado] = useState<CondominioDetalhado | null>(null);
     const [loading, setLoading] = useState(false);
     const [notification, setNotification] = useState<{ type: 'success' | 'error', message: string } | null>(null);
@@ -80,7 +82,18 @@ export function DetalhesCondominioPage({ condominioId, onBack }: Props) {
         <div className="section-content">
             <div className="cards-grid">
                 {condominioDetalhado?.tvs.map(tv => (
-                    <div key={tv.id} className="tv-card">
+                    <div 
+                        key={tv.id} 
+                        className="tv-card clickable-card"
+                        onClick={() => onViewTV && onViewTV(tv)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyPress={(e) => {
+                            if (e.key === 'Enter' && onViewTV) {
+                                onViewTV(tv);
+                            }
+                        }}
+                    >
                         <div className="card-header">
                             <FiMonitor size={24} />
                             <div className="card-title">{tv.nome}</div>
@@ -102,6 +115,10 @@ export function DetalhesCondominioPage({ condominioId, onBack }: Props) {
                                 <span>{new Date(tv.data_registro).toLocaleDateString('pt-BR')}</span>
                             </div>
                         </div>
+                        <div className="card-action">
+                            <FiChevronRight size={20} />
+                            <span>Ver detalhes</span>
+                        </div>
                     </div>
                 ))}
                 {(!condominioDetalhado?.tvs || condominioDetalhado.tvs.length === 0) && (
@@ -118,7 +135,18 @@ export function DetalhesCondominioPage({ condominioId, onBack }: Props) {
         <div className="section-content">
             <div className="anuncios-grid">
                 {condominioDetalhado?.anuncios.map(anuncio => (
-                    <div key={anuncio.id} className="anuncio-card">
+                    <div 
+                        key={anuncio.id} 
+                        className="anuncio-card clickable-card"
+                        onClick={() => onViewAnuncio && onViewAnuncio(anuncio)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyPress={(e) => {
+                            if (e.key === 'Enter' && onViewAnuncio) {
+                                onViewAnuncio(anuncio);
+                            }
+                        }}
+                    >
                         <div className="anuncio-image">
                             <img 
                                 src={anuncio.archive_url} 
@@ -139,6 +167,10 @@ export function DetalhesCondominioPage({ condominioId, onBack }: Props) {
                                     {anuncio.status === 'ativo' ? 'Ativo' : 'Inativo'}
                                 </span>
                             </div>
+                        </div>
+                        <div className="card-action" style={{padding: '0.5rem'}}>
+                            <FiChevronRight size={20} />
+                            <span>Ver detalhes</span>
                         </div>
                     </div>
                 ))}

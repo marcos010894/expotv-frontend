@@ -309,3 +309,44 @@
         gap: 16px;
     }
 }
+/* Cards clicáveis */
+.clickable-card {
+    cursor: pointer;
+    position: relative;
+}
+
+.clickable-card:hover {
+    border-color: #2C3D8E;
+    box-shadow: 0 6px 20px rgba(44, 61, 142, 0.15);
+}
+
+.clickable-card .card-action {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #e1e5e9;
+    color: #2C3D8E;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.clickable-card:hover .card-action {
+    gap: 10px;
+}
+
+.clickable-card .card-action svg {
+    transition: transform 0.2s ease;
+}
+
+.clickable-card:hover .card-action svg {
+    transform: translateX(3px);
+}
+
+.clickable-card:focus {
+    outline: 2px solid #2C3D8E;
+    outline-offset: 2px;
+}

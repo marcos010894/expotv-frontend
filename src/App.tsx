@@ -139,6 +139,14 @@ function App() {
               setEditingCondominioId(null);
               setCurrentPage('condominios');
             }}
+            onViewTV={(tv) => {
+              setViewingTVId(tv.id);
+              setCurrentPage('detalhes-tv');
+            }}
+            onViewAnuncio={(anuncio) => {
+              setViewingAnuncio(anuncio);
+              setCurrentPage('detalhes-anuncio');
+            }}
           />
         );
       case 'detalhes-condominio':
@@ -152,6 +160,14 @@ function App() {
             onBack={() => {
               setViewingCondominioId(null);
               setCurrentPage('condominios');
+            }}
+            onViewTV={(tv) => {
+              setViewingTVId(tv.id);
+              setCurrentPage('detalhes-tv');
+            }}
+            onViewAnuncio={(anuncio) => {
+              setViewingAnuncio(anuncio);
+              setCurrentPage('detalhes-anuncio');
             }}
           />
         );
