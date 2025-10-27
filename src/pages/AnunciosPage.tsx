@@ -1,5 +1,5 @@
 import './AnunciosPage.css';
-import { FiPlus } from 'react-icons/fi';
+import { FiPlus, FiSearch } from 'react-icons/fi';
 import { useState } from 'react';
 import DataTable from '../components/DataTable';
 import ConfirmModal from '../components/ConfirmModal';
@@ -25,6 +25,7 @@ const columns = [
 
 export default function AnunciosPage({ onRegister, onEdit, onView, onNotification }: AnunciosPageProps) {
   const { anuncios, loading, error, deleteAnuncio, getCondominiosNames } = useAnuncios();
+  const [searchTerm, setSearchTerm] = useState('');
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
@@ -46,6 +47,18 @@ export default function AnunciosPage({ onRegister, onEdit, onView, onNotificatio
       data_expiracao: new Date(anuncio.data_expiracao).toLocaleDateString('pt-BR'),
       status: anuncio.status === 'ativo' ? 'Ativo' : 'Inativo'
     };
+  });
+
+  // Filtrar anúncios baseado na pesquisa
+  const filteredAnuncios = anunciosData.filter(anuncio => {
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      anuncio.nome.toLowerCase().includes(searchLower) ||
+      anuncio.nome_anunciante.toLowerCase().includes(searchLower) ||
+      anuncio.numero_anunciante.toLowerCase().includes(searchLower) ||
+      anuncio.condominios_nomes.toLowerCase().includes(searchLower) ||
+      anuncio.status.toLowerCase().includes(searchLower)
+    );
   });
 
   const handleEdit = (item: any) => {
@@ -127,14 +140,42 @@ export default function AnunciosPage({ onRegister, onEdit, onView, onNotificatio
             </button>
           </div>
           
-          {anunciosData.length === 0 ? (
+          {/* Barra de Pesquisa */}
+          <div className="search-bar">
+            <FiSearch className="search-icon" />
+            <input
+              type="text"
+              placeholder="Pesquisar por nome, anunciante, telefone, condomínio ou status..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+            {searchTerm && (
+              <button 
+                className="search-clear"
+                onClick={() => setSearchTerm('')}
+                aria-label="Limpar pesquisa"
+              >
+                ×
+              </button>
+            )}
+          </div>
+
+          {/* Contador de resultados */}
+          {searchTerm && (
+            <div className="search-results-count">
+              {filteredAnuncios.length} {filteredAnuncios.length === 1 ? 'resultado encontrado' : 'resultados encontrados'}
+            </div>
+          )}
+          
+          {filteredAnuncios.length === 0 ? (
             <div className="empty-state">
-              <p>Nenhum anúncio encontrado.</p>
+              <p>{searchTerm ? 'Nenhum anúncio encontrado com esse filtro.' : 'Nenhum anúncio encontrado.'}</p>
             </div>
           ) : (
             <DataTable
               columns={columns}
-              data={anunciosData}
+              data={filteredAnuncios}
               onView={handleView}
               onEdit={handleEdit}
               onDelete={handleDelete}

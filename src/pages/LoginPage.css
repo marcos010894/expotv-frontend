@@ -3,7 +3,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #2C3D8E 0%, #1f2b66 100%);
     padding: 20px;
 }
 
@@ -34,7 +34,7 @@
 .login-header {
     text-align: center;
     padding: 40px 30px 30px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #2C3D8E 0%, #1f2b66 100%);
     color: white;
 }
 
@@ -114,9 +114,9 @@
 
 .input-with-icon input:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #2C3D8E;
     background-color: white;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    box-shadow: 0 0 0 3px rgba(44, 61, 142, 0.1);
 }
 
 .input-with-icon input:disabled {
@@ -141,7 +141,7 @@
 }
 
 .password-toggle:hover {
-    color: #667eea;
+    color: #2C3D8E;
 }
 
 .password-toggle:disabled {
@@ -152,7 +152,7 @@
 .login-button {
     width: 100%;
     padding: 14px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #2C3D8E 0%, #1f2b66 100%);
     color: white;
     border: none;
     border-radius: 8px;
@@ -169,7 +169,7 @@
 
 .login-button:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 8px 20px rgba(44, 61, 142, 0.3);
 }
 
 .login-button:active:not(:disabled) {
@@ -274,7 +274,7 @@
 /* Melhorar acessibilidade */
 
 .login-button:focus {
-    outline: 2px solid #667eea;
+    outline: 2px solid #2C3D8E;
     outline-offset: 2px;
 }
 

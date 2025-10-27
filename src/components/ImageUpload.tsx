@@ -144,7 +144,7 @@ export default function ImageUpload({
               <span className="upload-subtitle">
                 {allowVideo 
                   ? 'Formatos suportados: JPG, PNG, GIF, MP4, MOV, AVI (máx. 50MB)'
-                  : 'Formatos suportados: JPG, PNG, GIF (máx. 10MB)'
+                  : 'Formatos suportados: JPG, PNG (máx. 10MB)'
                 }
               </span>
             </div>

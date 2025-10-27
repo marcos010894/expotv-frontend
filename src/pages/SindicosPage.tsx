@@ -1,5 +1,5 @@
 import './SindicosPage.css';
-import { FiPlus } from 'react-icons/fi';
+import { FiPlus, FiSearch } from 'react-icons/fi';
 import { useState } from 'react';
 import DataTable from '../components/DataTable';
 import ConfirmModal from '../components/ConfirmModal';
@@ -23,6 +23,7 @@ const columns = [
 
 export default function SindicosPage({ onRegister, onEdit, onNotification }: SindicosPageProps) {
   const { users, loading, error, deleteUser } = useUsers();
+  const [searchTerm, setSearchTerm] = useState('');
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
@@ -38,6 +39,17 @@ export default function SindicosPage({ onRegister, onEdit, onNotification }: Sin
     data_criacao: new Date(user.data_criacao).toLocaleDateString('pt-BR'),
     telefone: user.telefone || 'N/A'
   }));
+
+  // Filtrar usuários baseado na pesquisa
+  const filteredUsers = sindicosData.filter(user => {
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      user.nome.toLowerCase().includes(searchLower) ||
+      user.email.toLowerCase().includes(searchLower) ||
+      (user.telefone && user.telefone.toLowerCase().includes(searchLower)) ||
+      user.tipo.toLowerCase().includes(searchLower)
+    );
+  });
 
   const handleEdit = (user: User) => {
     onEdit(user);
@@ -102,14 +114,42 @@ export default function SindicosPage({ onRegister, onEdit, onNotification }: Sin
             </button>
           </div>
           
-          {sindicosData.length === 0 ? (
+          {/* Barra de Pesquisa */}
+          <div className="search-bar">
+            <FiSearch className="search-icon" />
+            <input
+              type="text"
+              placeholder="Pesquisar por nome, email, telefone ou tipo..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+            {searchTerm && (
+              <button 
+                className="search-clear"
+                onClick={() => setSearchTerm('')}
+                aria-label="Limpar pesquisa"
+              >
+                ×
+              </button>
+            )}
+          </div>
+
+          {/* Contador de resultados */}
+          {searchTerm && (
+            <div className="search-results-count">
+              {filteredUsers.length} {filteredUsers.length === 1 ? 'resultado encontrado' : 'resultados encontrados'}
+            </div>
+          )}
+          
+          {filteredUsers.length === 0 ? (
             <div className="empty-state">
-              <p>Nenhum usuário encontrado.</p>
+              <p>{searchTerm ? 'Nenhum usuário encontrado com esse filtro.' : 'Nenhum usuário encontrado.'}</p>
             </div>
           ) : (
             <DataTable
               columns={columns}
-              data={sindicosData}
+              data={filteredUsers}
               onEdit={handleEdit}
               onDelete={handleDelete}
             />

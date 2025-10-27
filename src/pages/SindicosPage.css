@@ -117,3 +117,68 @@
         padding: 16px;
     }
 }
+/* Barra de Pesquisa */
+.search-bar {
+    position: relative;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 16px;
+    color: #9ca3af;
+    font-size: 18px;
+    pointer-events: none;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 48px 12px 48px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #374151;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.search-input:focus {
+    border-color: #2C3D8E;
+    box-shadow: 0 0 0 3px rgba(44, 61, 142, 0.1);
+}
+
+.search-input::placeholder {
+    color: #9ca3af;
+}
+
+.search-clear {
+    position: absolute;
+    right: 12px;
+    background: #e5e7eb;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 20px;
+    color: #6b7280;
+    transition: all 0.2s ease;
+    line-height: 1;
+}
+
+.search-clear:hover {
+    background: #d1d5db;
+    color: #374151;
+}
+
+.search-results-count {
+    margin-bottom: 16px;
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 500;
+}

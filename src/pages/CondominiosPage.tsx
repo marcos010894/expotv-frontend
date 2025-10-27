@@ -1,5 +1,5 @@
 import './CondominiosPage.css';
-import { FiPlus } from 'react-icons/fi';
+import { FiPlus, FiSearch } from 'react-icons/fi';
 import { useState } from 'react';
 import DataTable from '../components/DataTable';
 import ConfirmModal from '../components/ConfirmModal';
@@ -26,6 +26,7 @@ const columns = [
 
 export default function CondominiosPage({ onRegister, onEdit, onView, onNotification }: CondominiosPageProps) {
   const { condominios, sindicos, tvs, anuncios, loading, error, deleteCondominio } = useCondominios();
+  const [searchTerm, setSearchTerm] = useState('');
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
     condominio: Condominio | null;
@@ -55,6 +56,17 @@ export default function CondominiosPage({ onRegister, onEdit, onView, onNotifica
       data_registro: new Date(condominio.data_registro).toLocaleDateString('pt-BR'),
       cep: condominio.cep.replace(/(\d{5})(\d{3})/, '$1-$2') // Formatar CEP
     };
+  });
+
+  // Filtrar condomínios baseado na pesquisa
+  const filteredCondominios = condominiosData.filter(condominio => {
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      condominio.nome.toLowerCase().includes(searchLower) ||
+      condominio.localizacao.toLowerCase().includes(searchLower) ||
+      condominio.cep.includes(searchLower) ||
+      condominio.sindico_nome.toLowerCase().includes(searchLower)
+    );
   });
 
   const handleEdit = (condominio: Condominio) => {
@@ -125,14 +137,42 @@ export default function CondominiosPage({ onRegister, onEdit, onView, onNotifica
             </button>
           </div>
           
-          {condominiosData.length === 0 ? (
+          {/* Barra de Pesquisa */}
+          <div className="search-bar">
+            <FiSearch className="search-icon" />
+            <input
+              type="text"
+              placeholder="Pesquisar por nome, localização, CEP ou síndico..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+            {searchTerm && (
+              <button 
+                className="search-clear"
+                onClick={() => setSearchTerm('')}
+                aria-label="Limpar pesquisa"
+              >
+                ×
+              </button>
+            )}
+          </div>
+
+          {/* Contador de resultados */}
+          {searchTerm && (
+            <div className="search-results-count">
+              {filteredCondominios.length} {filteredCondominios.length === 1 ? 'resultado encontrado' : 'resultados encontrados'}
+            </div>
+          )}
+          
+          {filteredCondominios.length === 0 ? (
             <div className="empty-state">
-              <p>Nenhum condomínio encontrado.</p>
+              <p>{searchTerm ? 'Nenhum condomínio encontrado com esse filtro.' : 'Nenhum condomínio encontrado.'}</p>
             </div>
           ) : (
             <DataTable
               columns={columns}
-              data={condominiosData}
+              data={filteredCondominios}
               onView={handleView}
               onEdit={handleEdit}
               onDelete={handleDelete}
