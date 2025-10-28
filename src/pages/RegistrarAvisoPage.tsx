@@ -20,6 +20,7 @@ interface FormData {
   image?: File;
   video?: File;
   mediaType: 'image' | 'video';
+  contentType: 'texto' | 'midia'; // Nova propriedade para o toggle
 }
 
 export default function RegistrarAvisoPage({ onBack, onSuccess, onError }: RegistrarAvisoPageProps) {
@@ -46,7 +47,8 @@ export default function RegistrarAvisoPage({ onBack, onSuccess, onError }: Regis
     mensagem: '',
     image: undefined,
     video: undefined,
-    mediaType: 'image'
+    mediaType: 'image',
+    contentType: 'texto' // Padrão: texto
   });
   const [loading, setLoading] = useState(false);
 
@@ -118,6 +120,17 @@ export default function RegistrarAvisoPage({ onBack, onSuccess, onError }: Regis
         video: undefined
       }));
     }
+  };
+
+  const handleContentTypeChange = (type: 'texto' | 'midia') => {
+    setFormData(prev => ({
+      ...prev,
+      contentType: type,
+      // Limpar campos ao trocar de tipo
+      mensagem: type === 'midia' ? '' : prev.mensagem,
+      image: type === 'texto' ? undefined : prev.image,
+      video: type === 'texto' ? undefined : prev.video
+    }));
   };
 
   const setExpirationDate = (days: number) => {
@@ -232,6 +245,47 @@ export default function RegistrarAvisoPage({ onBack, onSuccess, onError }: Regis
             </div>
           </div>
 
+          {/* Toggle de Tipo de Conteúdo */}
+          <div className="form-group">
+            <label>Tipo de Conteúdo *</label>
+            <div className="content-type-toggle">
+              <div className="content-type-option">
+                <input
+                  type="radio"
+                  id="contentType-texto"
+                  name="contentType"
+                  value="texto"
+                  checked={formData.contentType === 'texto'}
+                  onChange={() => handleContentTypeChange('texto')}
+                />
+                <label htmlFor="contentType-texto" className="content-type-label">
+                  <span className="emoji">📝</span>
+                  <span>Texto</span>
+                </label>
+              </div>
+              
+              <div className="content-type-option">
+                <input
+                  type="radio"
+                  id="contentType-midia"
+                  name="contentType"
+                  value="midia"
+                  checked={formData.contentType === 'midia'}
+                  onChange={() => handleContentTypeChange('midia')}
+                />
+                <label htmlFor="contentType-midia" className="content-type-label">
+                  <span className="emoji">🎬</span>
+                  <span>Imagem/Vídeo</span>
+                </label>
+              </div>
+            </div>
+            <small className="content-type-hint">
+              {formData.contentType === 'texto' 
+                ? '✓ Modo texto ativo - Campo de mídia bloqueado' 
+                : '✓ Modo mídia ativo - Campo de mensagem bloqueado'}
+            </small>
+          </div>
+
           <div className="form-group">
             <label htmlFor="mensagem">Mensagem</label>
             <textarea
@@ -239,8 +293,14 @@ export default function RegistrarAvisoPage({ onBack, onSuccess, onError }: Regis
               name="mensagem"
               value={formData.mensagem}
               onChange={handleChange}
-              placeholder="Digite a mensagem completa do aviso"
+              placeholder={formData.contentType === 'texto' ? "Digite a mensagem completa do aviso" : "Campo bloqueado - Modo imagem/vídeo selecionado"}
               rows={6}
+              disabled={formData.contentType === 'midia'}
+              style={formData.contentType === 'midia' ? {
+                backgroundColor: '#f5f5f5',
+                cursor: 'not-allowed',
+                color: '#999'
+              } : {}}
             />
           </div>
 
@@ -312,12 +372,27 @@ export default function RegistrarAvisoPage({ onBack, onSuccess, onError }: Regis
           </div>
 
           <div className="form-group image-upload-group">
-            <label>Imagem do Aviso</label>
-            <ImageUpload 
-              onImageSelect={handleImageSelect}
-              value={formData.image}
-              placeholder="Clique para selecionar uma imagem para o aviso ou arraste aqui"
-            />
+            <label>Imagem/Vídeo do Aviso</label>
+            {formData.contentType === 'texto' ? (
+              <div style={{
+                padding: '2rem',
+                backgroundColor: '#f5f5f5',
+                border: '2px dashed #d1d5db',
+                borderRadius: '8px',
+                textAlign: 'center',
+                color: '#999'
+              }}>
+                <p>🔒 Upload bloqueado</p>
+                <small>Selecione "Imagem/Vídeo" no tipo de conteúdo para habilitar</small>
+              </div>
+            ) : (
+              <ImageUpload 
+                onImageSelect={handleImageSelect}
+                value={formData.image}
+                placeholder="Clique para selecionar uma imagem/vídeo para o aviso ou arraste aqui"
+                allowVideo={true}
+              />
+            )}
           </div>
 
           <div className="form-group">

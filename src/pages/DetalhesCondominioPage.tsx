@@ -131,58 +131,87 @@ export function DetalhesCondominioPage({ condominioId, onBack, onViewTV, onViewA
         </div>
     );
 
-    const renderAnunciosSection = () => (
-        <div className="section-content">
-            <div className="anuncios-grid">
-                {condominioDetalhado?.anuncios.map(anuncio => (
-                    <div 
-                        key={anuncio.id} 
-                        className="anuncio-card clickable-card"
-                        onClick={() => onViewAnuncio && onViewAnuncio(anuncio)}
-                        role="button"
-                        tabIndex={0}
-                        onKeyPress={(e) => {
-                            if (e.key === 'Enter' && onViewAnuncio) {
-                                onViewAnuncio(anuncio);
-                            }
-                        }}
-                    >
-                        <div className="anuncio-image">
-                            <img 
-                                src={anuncio.archive_url} 
-                                alt={anuncio.nome}
-                                onError={(e) => {
-                                    const target = e.target as HTMLImageElement;
-                                    target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzIwIiBoZWlnaHQ9IjEyMjQiIHZpZXdCb3g9IjAgMCA3MjAgMTIyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjcyMCIgaGVpZ2h0PSIxMjI0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0zNjAgNjEyQzM2MCA2MTIgMzYwIDYxMiAzNjAgNjEyWiIgZmlsbD0iIzlDQTNBRiIvPgo8L3N2Zz4K';
-                                }}
-                            />
-                        </div>
-                        <div className="anuncio-content">
-                            <h4>{anuncio.nome}</h4>
-                            <div className="anuncio-info">
-                                <span><strong>Anunciante:</strong> {anuncio.nome_anunciante}</span>
-                                <span><strong>Contato:</strong> {anuncio.numero_anunciante}</span>
-                                <span><strong>Vencimento:</strong> {new Date(anuncio.data_expiracao).toLocaleDateString('pt-BR')}</span>
-                                <span className={`anuncio-status ${anuncio.status}`}>
-                                    {anuncio.status === 'ativo' ? 'Ativo' : 'Inativo'}
-                                </span>
+    const renderAnunciosSection = () => {
+        // Função para verificar se é vídeo
+        const isVideo = (url: string) => {
+            if (!url) return false;
+            const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi'];
+            const urlLower = url.toLowerCase();
+            return videoExtensions.some(ext => urlLower.endsWith(ext));
+        };
+
+        return (
+            <div className="section-content">
+                <div className="anuncios-grid">
+                    {condominioDetalhado?.anuncios.map(anuncio => (
+                        <div 
+                            key={anuncio.id} 
+                            className="anuncio-card clickable-card"
+                            onClick={() => onViewAnuncio && onViewAnuncio(anuncio)}
+                            role="button"
+                            tabIndex={0}
+                            onKeyPress={(e) => {
+                                if (e.key === 'Enter' && onViewAnuncio) {
+                                    onViewAnuncio(anuncio);
+                                }
+                            }}
+                        >
+                            <div className="anuncio-image">
+                                {isVideo(anuncio.archive_url) ? (
+                                    <video 
+                                        src={anuncio.archive_url}
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            objectFit: 'cover'
+                                        }}
+                                        muted
+                                        loop
+                                        playsInline
+                                        onMouseEnter={(e) => e.currentTarget.play()}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.pause();
+                                            e.currentTarget.currentTime = 0;
+                                        }}
+                                    />
+                                ) : (
+                                    <img 
+                                        src={anuncio.archive_url} 
+                                        alt={anuncio.nome}
+                                        onError={(e) => {
+                                            const target = e.target as HTMLImageElement;
+                                            target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzIwIiBoZWlnaHQ9IjEyMjQiIHZpZXdCb3g9IjAgMCA3MjAgMTIyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjcyMCIgaGVpZ2h0PSIxMjI0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0zNjAgNjEyQzM2MCA2MTIgMzYwIDYxMiAzNjAgNjEyWiIgZmlsbD0iIzlDQTNBRiIvPgo8L3N2Zz4K';
+                                        }}
+                                    />
+                                )}
+                            </div>
+                            <div className="anuncio-content">
+                                <h4>{anuncio.nome}</h4>
+                                <div className="anuncio-info">
+                                    <span><strong>Anunciante:</strong> {anuncio.nome_anunciante}</span>
+                                    <span><strong>Contato:</strong> {anuncio.numero_anunciante}</span>
+                                    <span><strong>Vencimento:</strong> {new Date(anuncio.data_expiracao).toLocaleDateString('pt-BR')}</span>
+                                    <span className={`anuncio-status ${anuncio.status}`}>
+                                        {anuncio.status === 'ativo' ? 'Ativo' : 'Inativo'}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="card-action" style={{padding: '0.5rem'}}>
+                                <FiChevronRight size={20} />
+                                <span>Ver detalhes</span>
                             </div>
                         </div>
-                        <div className="card-action" style={{padding: '0.5rem'}}>
-                            <FiChevronRight size={20} />
-                            <span>Ver detalhes</span>
+                    ))}
+                    {(!condominioDetalhado?.anuncios || condominioDetalhado.anuncios.length === 0) && (
+                        <div className="empty-state">
+                            <FiImage size={48} />
+                            <p>Nenhum anúncio cadastrado</p>
                         </div>
-                    </div>
-                ))}
-                {(!condominioDetalhado?.anuncios || condominioDetalhado.anuncios.length === 0) && (
-                    <div className="empty-state">
-                        <FiImage size={48} />
-                        <p>Nenhum anúncio cadastrado</p>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
-        </div>
-    );
+        );
+    };
 
     if (loading) {
         return (

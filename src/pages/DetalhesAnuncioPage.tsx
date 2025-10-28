@@ -18,6 +18,14 @@ export default function DetalhesAnuncioPage({ anuncio, onBack }: DetalhesAnuncio
     return new Date(dateString).toLocaleDateString('pt-BR');
   };
 
+  // Função para verificar se é vídeo
+  const isVideo = (url: string) => {
+    if (!url) return false;
+    const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi'];
+    const urlLower = url.toLowerCase();
+    return videoExtensions.some(ext => urlLower.endsWith(ext));
+  };
+
   const condominiosNomes = getCondominiosNames(anuncio.condominios_ids);
 
   return (
@@ -31,11 +39,11 @@ export default function DetalhesAnuncioPage({ anuncio, onBack }: DetalhesAnuncio
           <h1 className="page-title">Detalhes do Anuncio</h1>
           {anuncio.archive_url && (
             <button 
-              className="btn btn-info"
+              className="btn btn-info btn-preview-small"
               onClick={() => setShowPreview(true)}
-              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+              style={{ display: 'flex', alignItems: 'center', gap: '4px' }}
             >
-              <FiEye size={18} />
+              <FiEye size={14} />
               Pré-visualizar na TV
             </button>
           )}
@@ -86,32 +94,36 @@ export default function DetalhesAnuncioPage({ anuncio, onBack }: DetalhesAnuncio
           </div>
 
           <div className="details-section">
-            <h2 className="section-title">
-              <FiHome className="section-icon" />
-              Condominios
-            </h2>
-            <div className="condominiums-list">
-              {condominiosNomes.split(', ').map((nome, index) => (
-                <div key={index} className="condominium-chip">
-                  <FiHome className="chip-icon" />
-                  {nome}
+            <div className="condominios-periodo-grid">
+              <div className="condominios-section">
+                <h2 className="section-title">
+                  <FiHome className="section-icon" />
+                  Condomínios
+                </h2>
+                <div className="condominiums-list">
+                  {condominiosNomes.split(', ').map((nome, index) => (
+                    <div key={index} className="condominium-chip">
+                      <FiHome className="chip-icon" />
+                      {nome}
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
 
-          <div className="details-section">
-            <h2 className="section-title">
-              <FiCalendar className="section-icon" />
-              Período
-            </h2>
-            <div className="details-grid">
-              <div className="detail-item">
-                <span className="detail-label">
-                  <FiCalendar className="detail-icon" />
-                  Data de Expiração:
-                </span>
-                <span className="detail-value">{formatDate(anuncio.data_expiracao)}</span>
+              <div className="periodo-section">
+                <h2 className="section-title">
+                  <FiCalendar className="section-icon" />
+                  Período
+                </h2>
+                <div className="details-grid">
+                  <div className="detail-item">
+                    <span className="detail-label">
+                      <FiCalendar className="detail-icon" />
+                      Data de Expiração:
+                    </span>
+                    <span className="detail-value">{formatDate(anuncio.data_expiracao)}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -120,14 +132,25 @@ export default function DetalhesAnuncioPage({ anuncio, onBack }: DetalhesAnuncio
             <div className="details-section">
               <h2 className="section-title">
                 <FiImage className="section-icon" />
-                Imagem do Anuncio
+                {isVideo(anuncio.archive_url) ? 'Vídeo do Anúncio' : 'Imagem do Anúncio'}
               </h2>
               <div className="image-container">
-                <img 
-                  src={anuncio.archive_url} 
-                  alt={`Imagem do anuncio ${anuncio.nome}`}
-                  className="anuncio-image"
-                />
+                {isVideo(anuncio.archive_url) ? (
+                  <video 
+                    src={anuncio.archive_url}
+                    className="anuncio-image"
+                    controls
+                    muted
+                    loop
+                    playsInline
+                  />
+                ) : (
+                  <img 
+                    src={anuncio.archive_url} 
+                    alt={`Imagem do anuncio ${anuncio.nome}`}
+                    className="anuncio-image"
+                  />
+                )}
               </div>
             </div>
           )}

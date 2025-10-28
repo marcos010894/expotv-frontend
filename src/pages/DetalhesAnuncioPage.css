@@ -22,8 +22,42 @@
     margin-left: auto;
 }
 
+/* Botão de preview menor */
+.btn-preview-small {
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+    min-width: auto !important;
+    max-width: 180px !important;
+    width: auto !important;
+    height: auto !important;
+    line-height: 1.4 !important;
+    white-space: nowrap !important;
+}
+
+.btn-preview-small svg {
+    font-size: 14px !important;
+}
+
 
 /* Estilos específicos para anúncios */
+
+/* Grid para Condomínios e Período no mesmo card */
+.condominios-periodo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.condominios-section,
+.periodo-section {
+    min-width: 0; /* Permite que o conteúdo quebre corretamente */
+}
+
+@media (max-width: 768px) {
+    .condominios-periodo-grid {
+        grid-template-columns: 1fr;
+    }
+}
 
 .condominiums-list {
     display: flex;
@@ -62,12 +96,32 @@
 .image-container {
     margin-top: 12px;
     text-align: center;
+    display: flex;
+    justify-content: center;
 }
 
-.anuncio-image {
-    max-width: 100%;
-    max-height: 400px;
+.anuncio-image,
+.anuncio-image video {
+    width: auto;
+    height: auto;
+    max-width: 360px; /* 720px / 2 para reduzir pela metade */
+    max-height: 612px; /* 1224px / 2 para reduzir pela metade */
+    aspect-ratio: 720 / 1224; /* Mantém a proporção 720x1224 (9:15.3) */
+    object-fit: contain;
     border-radius: 8px;
     border: 1px solid #e1e5e9;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos específicos para vídeo */
+video.anuncio-image {
+    background-color: #000;
+}
+
+@media (max-width: 768px) {
+    .anuncio-image,
+    .anuncio-image video {
+        max-width: 100%;
+        max-height: 500px;
+    }
 }
