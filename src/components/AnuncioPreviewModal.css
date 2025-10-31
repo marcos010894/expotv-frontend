@@ -76,129 +76,17 @@
     align-items: center;
 }
 
-/* Simulação da TV */
-.tv-simulation {
-    width: 360px;
-    height: 612px;
-    background: #000;
-    border: 8px solid #1a1a1a;
-    border-radius: 16px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    position: relative;
-}
-
-/* Área de Notícias (20% - Template 1) - EMBAIXO */
-.tv-noticias {
-    height: 20%;
-    background: #000;
-    border-top: 2px solid #333;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #666;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 2px;
-}
-
-/* Área do Anúncio (75% Template 1 ou 95% Template 2) */
-.tv-anuncio {
-    flex: 1;
-    background: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-}
-
-.tv-anuncio img,
-.tv-anuncio video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.tv-anuncio video {
-    background: #000;
-}
-
-.tv-anuncio-placeholder {
-    text-align: center;
-    color: #9ca3af;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-}
-
-.tv-anuncio-placeholder svg {
-    color: #d1d5db;
-}
-
-.tv-anuncio-placeholder p {
-    margin: 8px 0;
-}
-
-.tv-anuncio-placeholder .nome-anuncio {
-    font-size: 12px;
-    font-weight: 600;
-    color: #2C3D8E;
-    margin-top: 12px;
-}
-
-/* Bar Info (5%) - NO TOPO */
-.tv-bar-info {
-    height: 5%;
-    background: linear-gradient(135deg, #6b7280, #4b5563);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    border-bottom: 2px solid #374151;
-}
-
-/* Informações da Preview */
-.preview-info {
-    background: #f9fafb;
-    padding: 16px 20px;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-    width: 100%;
-    max-width: 600px;
-}
-
-.preview-info p {
-    margin: 8px 0;
-    font-size: 14px;
-    color: #374151;
-}
-
-.preview-info strong {
-    color: #2C3D8E;
-    font-weight: 600;
-}
-
 /* Seletor de Template */
 .template-selector {
     width: 100%;
-    max-width: 600px;
-    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .template-selector label {
-    display: block;
-    margin-bottom: 12px;
-    color: #374151;
     font-size: 14px;
+    color: #374151;
 }
 
 .template-buttons {
@@ -209,106 +97,355 @@
 
 .template-btn {
     flex: 1;
-    min-width: 200px;
-    padding: 12px 20px;
+    min-width: 180px;
+    padding: 12px 16px;
+    background: white;
     border: 2px solid #e5e7eb;
     border-radius: 8px;
-    background: white;
-    color: #374151;
     font-size: 14px;
     font-weight: 500;
+    color: #6b7280;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .template-btn:hover {
     border-color: #2C3D8E;
-    background: #f0f4ff;
+    color: #2C3D8E;
+    background: #f9fafb;
 }
 
 .template-btn.active {
-    border-color: #2C3D8E;
     background: #2C3D8E;
+    border-color: #2C3D8E;
     color: white;
-    font-weight: 600;
 }
 
-.template-btn.active:hover {
-    background: #1f2b66;
-    border-color: #1f2b66;
+/* Wrapper da simulação da TV */
+.tv-simulation-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: #f5f5f5;
+    border-radius: 12px;
+    width: 100%;
+}
+
+/* Container da TV com proporções exatas (720x1224) */
+.tv-container {
+    width: 360px; /* 50% de 720px para caber no modal */
+    height: 612px; /* 50% de 1224px */
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Barcode (topo - 5% = 61px -> escala 30.5px) */
+.tv-barcode {
+    height: 30.5px; /* 5% de 612px */
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 5px;
+    font-size: 8px;
+    border-bottom: 1px solid #e5e7eb;
+    flex-shrink: 0;
+}
+
+.barcode-left {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.hour-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hour-time {
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 1;
+}
+
+.hour-date {
+    font-size: 6px;
+    font-weight: 200;
+    color: #666;
+}
+
+.barcode-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+}
+
+.info-icon {
+    font-size: 10px;
+}
+
+.currency-flag {
+    font-size: 10px;
+}
+
+.bitcoin-icon {
+    background: #f7931a;
+    color: white;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 7px;
+}
+
+.info-value {
+    font-size: 8px;
+    font-weight: 200;
+}
+
+.info-unit {
+    font-size: 8px;
+    font-weight: 200;
+}
+
+.barcode-right {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.logo-placeholder {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    background: #f3f4f6;
+}
+
+.social-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.social-item {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 6px;
+    font-weight: 200;
+}
+
+.social-item svg {
+    font-size: 7px;
+}
+
+/* Área do Anúncio (75% = 459px ou 95% = 581.5px) */
+.tv-anuncio-area {
+    height: 459px; /* 75% de 612px para Template 1 */
+    background: #3399ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+}
+
+/* Template 2: Anúncio ocupa 95% */
+.tv-container.template-2 .tv-anuncio-area {
+    height: 581.5px; /* 95% de 612px */
+}
+
+.tv-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.tv-anuncio-placeholder {
+    text-align: center;
+    color: white;
+    padding: 20px;
+}
+
+.tv-anuncio-placeholder svg {
+    margin-bottom: 10px;
+}
+
+.tv-anuncio-placeholder p {
+    margin: 5px 0;
+    font-size: 12px;
+}
+
+/* Área de Notícias (20% = 122.5px - apenas Template 1) */
+.tv-noticia-area {
+    height: 122.5px; /* 20% de 612px */
+    background: black;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    font-size: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+/* Template 2: Esconder notícias */
+.tv-container.template-2 .tv-noticia-area {
+    display: none;
+}
+
+.noticia-content-mock {
+    display: flex;
+    gap: 6px;
+    width: 100%;
+}
+
+.noticia-image-mock {
+    flex-shrink: 0;
+}
+
+.noticia-image-placeholder {
+    width: 100px;
+    height: 100px;
+    background: #333;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+}
+
+.noticia-text-mock {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.noticia-title-mock {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: bold;
+    font-size: 10px;
+}
+
+.quote-icon {
+    color: #8b0000;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.noticia-desc-mock {
+    font-size: 7px;
+    line-height: 1.4;
+    color: #ccc;
+    font-weight: 200;
+}
+
+/* Informações do Preview */
+.preview-info {
+    margin-top: 20px;
+    padding: 16px;
+    background: #f9fafb;
+    border-radius: 8px;
+    border-left: 3px solid #2C3D8E;
+}
+
+.preview-info p {
+    margin: 8px 0;
+    font-size: 13px;
+    color: #374151;
+}
+
+.preview-info strong {
+    color: #1f2937;
+    font-weight: 600;
 }
 
 /* Footer */
 .preview-modal-footer {
-    display: flex;
-    gap: 12px;
-    padding: 20px 24px;
+    padding: 16px 24px;
     border-top: 1px solid #e5e7eb;
-    justify-content: center;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
 }
 
-.preview-modal-footer .btn {
-    padding: 10px 24px;
-    border-radius: 6px;
+.btn {
+    padding: 10px 20px;
+    border-radius: 8px;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
     border: none;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    min-width: 120px;
-    justify-content: center;
 }
 
-.preview-modal-footer .btn-secondary {
-    background-color: #f3f4f6;
+.btn-secondary {
+    background: #f3f4f6;
     color: #374151;
 }
 
-.preview-modal-footer .btn-secondary:hover {
-    background-color: #e5e7eb;
+.btn-secondary:hover {
+    background: #e5e7eb;
 }
 
-/* Responsividade */
+/* Responsive */
 @media (max-width: 768px) {
-    .preview-modal-overlay {
-        padding: 16px;
+    .tv-container {
+        width: 300px;
+        height: 510px;
     }
-    
-    .preview-modal-content {
-        max-width: 100%;
-        border-radius: 8px;
+
+    .tv-barcode {
+        height: 25.5px;
     }
-    
-    .preview-modal-body {
-        padding: 16px;
-        gap: 16px;
+
+    .tv-anuncio-area {
+        height: 382.5px;
     }
-    
-    .tv-simulation {
-        width: 280px;
-        height: 476px;
+
+    .tv-container.template-2 .tv-anuncio-area {
+        height: 484.5px;
     }
-    
-    .tv-noticias {
-        font-size: 11px;
+
+    .tv-noticia-area {
+        height: 102px;
     }
-    
-    .tv-bar-info {
-        font-size: 8px;
+
+    .noticia-image-placeholder {
+        width: 80px;
+        height: 80px;
+        font-size: 24px;
     }
-    
-    .preview-info {
-        font-size: 12px;
-        padding: 12px 16px;
-    }
-    
+
     .template-buttons {
         flex-direction: column;
     }
-    
+
     .template-btn {
         min-width: 100%;
     }

@@ -115,7 +115,7 @@ export function DetalhesCondominioPage({ condominioId, onBack, onViewTV, onViewA
                                 <span>{new Date(tv.data_registro).toLocaleDateString('pt-BR')}</span>
                             </div>
                         </div>
-                        <div className="card-action">
+                        <div className="card-action" style={{padding: '2rem'}}>
                             <FiChevronRight size={20} />
                             <span>Ver detalhes</span>
                         </div>
@@ -196,7 +196,7 @@ export function DetalhesCondominioPage({ condominioId, onBack, onViewTV, onViewA
                                     </span>
                                 </div>
                             </div>
-                            <div className="card-action" style={{padding: '0.5rem'}}>
+                            <div className="card-action" style={{padding: '2rem'}}>
                                 <FiChevronRight size={20} />
                                 <span>Ver detalhes</span>
                             </div>

@@ -187,6 +187,72 @@
 }
 
 
+/* Configuração de Proporção */
+
+.config-info-card {
+    padding: 24px;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: 12px;
+    border: 2px solid #cbd5e1;
+    margin-bottom: 24px;
+}
+
+.config-info-card h3 {
+    color: #1e293b;
+    margin: 0;
+}
+
+.proporção-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    margin: 16px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.proporção-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.proporção-emoji {
+    font-size: 28px;
+}
+
+.proporção-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #2C3D8E;
+}
+
+.proporção-label {
+    font-size: 13px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.proporção-sep {
+    font-size: 32px;
+    font-weight: 700;
+    color: #cbd5e1;
+    margin: 0 8px;
+}
+
+.config-hint {
+    margin: 0;
+    text-align: center;
+    color: #475569;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
 /* Responsividade */
 
 @media (max-width: 768px) {
@@ -209,5 +275,12 @@
         flex-direction: column;
         text-align: center;
         gap: 12px;
+    }
+    .proporção-display {
+        flex-direction: column;
+        gap: 12px;
+    }
+    .proporção-sep {
+        transform: rotate(90deg);
     }
 }

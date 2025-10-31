@@ -3,6 +3,7 @@ import './AvisosPage.css';
 import { FiPlus } from 'react-icons/fi';
 import DataTable from '../components/DataTable';
 import ConfirmModal from '../components/ConfirmModal';
+import AvisoPreviewModal from '../components/AvisoPreviewModal';
 import { useAvisos } from '../hooks/useAvisos';
 
 interface AvisosPageProps {
@@ -21,7 +22,7 @@ interface Aviso {
   status: string;
   data_expiracao?: string;
   mensagem: string;
-  image?: string | null;
+  archive_url?: string | null;
   sindico_id: number;
   condominio_id: number;
   data_criacao: string;
@@ -45,6 +46,13 @@ export default function AvisosPage({ onRegister, onEdit, onView, onNotification 
     isOpen: false,
     aviso: null
   });
+  const [previewModal, setPreviewModal] = useState<{
+    isOpen: boolean;
+    aviso: Aviso | null;
+  }>({
+    isOpen: false,
+    aviso: null
+  });
 
   const handleNewAviso = () => {
     onRegister();
@@ -55,7 +63,11 @@ export default function AvisosPage({ onRegister, onEdit, onView, onNotification 
   };
 
   const handleView = (aviso: Aviso) => {
-    onView(aviso);
+    setPreviewModal({ isOpen: true, aviso });
+  };
+
+  const closePreview = () => {
+    setPreviewModal({ isOpen: false, aviso: null });
   };
 
   const handleDelete = (aviso: Aviso) => {
@@ -132,6 +144,7 @@ export default function AvisosPage({ onRegister, onEdit, onView, onNotification 
               data={avisosData}
               onEdit={handleEdit}
               onDelete={handleDelete}
+              onView={handleView}
             />
           )}
         </div>
@@ -147,6 +160,14 @@ export default function AvisosPage({ onRegister, onEdit, onView, onNotification 
         onConfirm={confirmDelete}
         onCancel={cancelDelete}
       />
+
+      {previewModal.aviso && (
+        <AvisoPreviewModal
+          isOpen={previewModal.isOpen}
+          onClose={closePreview}
+          aviso={previewModal.aviso}
+        />
+      )}
     </>
   );
 }

@@ -95,6 +95,27 @@ export interface TV {
   condominio_id: number;
   status: 'online' | 'offline';
   data_registro: string;
+  proporcao_avisos?: number;
+  proporcao_anuncios?: number;
+  proporcao_noticias?: number;
+}
+
+export interface TVConfigProporcao {
+  proporcao_avisos: number;
+  proporcao_anuncios: number;
+  proporcao_noticias: number;
+}
+
+export interface TVConfigResponse {
+  tv_id: number;
+  nome: string;
+  codigo_conexao: string;
+  config: {
+    proporcao_avisos: number;
+    proporcao_anuncios: number;
+    proporcao_noticias: number;
+    descricao: string;
+  };
 }
 
 export interface Anuncio {
@@ -451,6 +472,28 @@ export const tvService = {
       await api.delete(`/tvs/${id}`);
     } catch (error) {
       console.error('Erro ao deletar TV:', error);
+      throw error;
+    }
+  },
+
+  // Buscar configuração de proporção da TV
+  getTVConfig: async (id: number): Promise<TVConfigResponse> => {
+    try {
+      const response = await api.get<TVConfigResponse>(`/tvs/${id}/config`);
+      return response.data;
+    } catch (error) {
+      console.error('Erro ao buscar configuração da TV:', error);
+      throw error;
+    }
+  },
+
+  // Atualizar configuração de proporção da TV
+  updateTVConfig: async (id: number, config: TVConfigProporcao): Promise<TVConfigResponse> => {
+    try {
+      const response = await api.put<TVConfigResponse>(`/tvs/${id}/config`, config);
+      return response.data;
+    } catch (error) {
+      console.error('Erro ao atualizar configuração da TV:', error);
       throw error;
     }
   },

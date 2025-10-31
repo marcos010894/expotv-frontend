@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { FiArrowLeft, FiMonitor, FiHome, FiWifi, FiWifiOff } from 'react-icons/fi';
-import { tvService, condominioService, type TV, type Condominio } from '../services/api';
+import { FiArrowLeft, FiMonitor, FiHome, FiWifi, FiWifiOff, FiSettings } from 'react-icons/fi';
+import { tvService, condominioService, type TV, type Condominio, type TVConfigProporcao } from '../services/api';
 import Notification from '../components/Notification';
+import TVConfigModal from '../components/TVConfigModal';
 import './DetalhesTVPage.css';
 
 interface Props {
@@ -14,6 +15,7 @@ export function DetalhesTVPage({ tvId, onBack }: Props) {
     const [condominio, setCondominio] = useState<Condominio | null>(null);
     const [loading, setLoading] = useState(false);
     const [notification, setNotification] = useState<{ type: 'success' | 'error', message: string } | null>(null);
+    const [showConfigModal, setShowConfigModal] = useState(false);
 
     useEffect(() => {
         loadTVDetails();
@@ -39,6 +41,18 @@ export function DetalhesTVPage({ tvId, onBack }: Props) {
         onBack && onBack();
     };
 
+    const handleSaveConfig = async (config: TVConfigProporcao) => {
+        try {
+            const response = await tvService.updateTVConfig(tvId, config);
+            setNotification({ type: 'success', message: 'Configuração salva com sucesso!' });
+            // Atualizar os dados da TV
+            await loadTVDetails();
+        } catch (error) {
+            setNotification({ type: 'error', message: 'Erro ao salvar configuração' });
+            throw error;
+        }
+    };
+
     if (loading) {
         return (
             <div className="sindicos-page">
@@ -57,10 +71,22 @@ export function DetalhesTVPage({ tvId, onBack }: Props) {
                 <div className="details-container">
                     <div className="page-header">
                         <h1 className="page-title">Detalhes da TV</h1>
-                        <button onClick={handleBack} className="back-btn">
-                            <FiArrowLeft size={20} />
-                            Voltar
-                        </button>
+                        <div style={{ display: 'flex', gap: '12px' }}>
+                            {tv && (
+                                <button 
+                                    onClick={() => setShowConfigModal(true)} 
+                                    className="btn btn-info"
+                                    style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                                >
+                                    <FiSettings size={18} />
+                                    Configurar Proporção
+                                </button>
+                            )}
+                            <button onClick={handleBack} className="back-btn">
+                                <FiArrowLeft size={20} />
+                                Voltar
+                            </button>
+                        </div>
                     </div>
 
                     {tv && (
@@ -114,6 +140,40 @@ export function DetalhesTVPage({ tvId, onBack }: Props) {
                                 </div>
                             </div>
 
+                            <div className="config-info-card">
+                                <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                                    <FiSettings size={20} />
+                                    Configuração de Proporção
+                                </h3>
+                                <div className="proporção-display">
+                                    <div className="proporção-item">
+                                        <span className="proporção-emoji">📢</span>
+                                        <span className="proporção-value">{tv.proporcao_avisos ?? 1}</span>
+                                        <span className="proporção-label">Avisos</span>
+                                    </div>
+                                    <span className="proporção-sep">:</span>
+                                    <div className="proporção-item">
+                                        <span className="proporção-emoji">📺</span>
+                                        <span className="proporção-value">{tv.proporcao_anuncios ?? 5}</span>
+                                        <span className="proporção-label">Anúncios</span>
+                                    </div>
+                                    {tv.template === 'layout2' && (
+                                        <>
+                                            <span className="proporção-sep">:</span>
+                                            <div className="proporção-item">
+                                                <span className="proporção-emoji">📰</span>
+                                                <span className="proporção-value">{tv.proporcao_noticias ?? 3}</span>
+                                                <span className="proporção-label">Notícias</span>
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                                <p className="config-hint">
+                                    Esta TV exibe {tv.proporcao_avisos ?? 1} aviso(s) para cada {tv.proporcao_anuncios ?? 5} anúncio(s)
+                                    {tv.template === 'layout2' && ` e ${tv.proporcao_noticias ?? 3} notícia(s) em tela cheia`}.
+                                </p>
+                            </div>
+
                             <div className="connection-info">
                                 <div className="connection-card">
                                     <FiHome size={24} />
@@ -136,6 +196,15 @@ export function DetalhesTVPage({ tvId, onBack }: Props) {
                     type={notification.type}
                     message={notification.message}
                     onClose={() => setNotification(null)}
+                />
+            )}
+
+            {tv && (
+                <TVConfigModal
+                    isOpen={showConfigModal}
+                    onClose={() => setShowConfigModal(false)}
+                    tv={tv}
+                    onSave={handleSaveConfig}
                 />
             )}
         </div>
