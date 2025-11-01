@@ -154,28 +154,32 @@ export default function AnuncioPreviewModal({
               </div>
 
               {/* Área do Anúncio (75% = 918px ou 95% = 1163px) */}
-              <div className="tv-anuncio-area">
-                {imageUrl ? (
-                  mediaIsVideo ? (
-                    <video 
-                      src={imageUrl} 
-                      autoPlay 
-                      loop 
-                      muted
-                      playsInline
-                      className="tv-media"
-                    >
-                      Seu navegador não suporta vídeos.
-                    </video>
-                  ) : (
-                    <img src={imageUrl} alt={nome} className="tv-media" />
-                  )
-                ) : (
+              <div 
+                className="tv-anuncio-area"
+                style={imageUrl && !mediaIsVideo ? {
+                  backgroundImage: `url('${imageUrl}')`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat'
+                } : undefined}
+              >
+                {imageUrl && mediaIsVideo ? (
+                  <video 
+                    src={imageUrl} 
+                    autoPlay 
+                    loop 
+                    muted
+                    playsInline
+                    className="tv-media"
+                  >
+                    Seu navegador não suporta vídeos.
+                  </video>
+                ) : !imageUrl ? (
                   <div className="tv-anuncio-placeholder">
                     {mediaIsVideo ? <FiVideo size={48} /> : <FiImage size={48} />}
                     <p>{nome || 'Anúncio'}</p>
                   </div>
-                )}
+                ) : null}
               </div>
 
               {/* Notícias embaixo (20% = 245px - apenas Template 1) */}
@@ -188,11 +192,11 @@ export default function AnuncioPreviewModal({
                     <div className="noticia-text-mock">
                       <div className="noticia-title-mock">
                         <FaQuoteLeft className="quote-icon" />
-                        <span>Título da Notícia</span>
+                        <span>Título da Notícia de Exemplo</span>
                       </div>
                       <div className="noticia-desc-mock">
-                        Os layouts de página ficam melhores com algo em cada seção. 
-                        Designers usam lorem ipsum para distinguir áreas de conteúdo...
+                        Esta é uma descrição de exemplo de uma notícia que apareceria na parte inferior da TV. 
+                        O conteúdo real das notícias será carregado automaticamente da API.
                       </div>
                     </div>
                   </div>
@@ -203,20 +207,21 @@ export default function AnuncioPreviewModal({
 
           {/* Informações do Preview */}
           <div className="preview-info">
-            <p><strong>Tipo de Mídia:</strong> {mediaIsVideo ? 'Vídeo' : 'Imagem'}</p>
-            <p><strong>Template:</strong> {isTemplate1 ? 'Template 1 (Com Notícias)' : 'Template 2 (Tela Cheia)'}</p>
-            <p><strong>Resolução TV:</strong> 720 x 1224 px (vertical)</p>
+            <p><strong>📱 Tipo de Mídia:</strong> {mediaIsVideo ? 'Vídeo' : 'Imagem'}</p>
+            <p><strong>📐 Template:</strong> {isTemplate1 ? 'Template 1 (Com Notícias na Barra Inferior)' : 'Template 2 (Anúncio em Tela Cheia)'}</p>
+            <p><strong>📺 Resolução TV:</strong> 720 x 1224 px (Portrait - Vertical)</p>
+            <p><strong>⚙️ Proporções:</strong></p>
             {isTemplate1 ? (
-              <>
-                <p><strong>Barcode (topo):</strong> 720 x 61 px (5%)</p>
-                <p><strong>Anúncio:</strong> 720 x 918 px (75%)</p>
-                <p><strong>Notícias (rodapé):</strong> 720 x 245 px (20%)</p>
-              </>
+              <ul style={{ margin: '8px 0', paddingLeft: '20px', fontSize: '13px', color: '#6b7280' }}>
+                <li><strong>Barcode (topo):</strong> 720 x 61 px (5%) - Informações e hora</li>
+                <li><strong>Anúncio (centro):</strong> 720 x 918 px (75%) - Seu conteúdo</li>
+                <li><strong>Notícias (rodapé):</strong> 720 x 245 px (20%) - Feed de notícias</li>
+              </ul>
             ) : (
-              <>
-                <p><strong>Barcode (topo):</strong> 720 x 61 px (5%)</p>
-                <p><strong>Anúncio:</strong> 720 x 1163 px (95%)</p>
-              </>
+              <ul style={{ margin: '8px 0', paddingLeft: '20px', fontSize: '13px', color: '#6b7280' }}>
+                <li><strong>Barcode (topo):</strong> 720 x 61 px (5%) - Informações e hora</li>
+                <li><strong>Anúncio (centro):</strong> 720 x 1163 px (95%) - Seu conteúdo em destaque</li>
+              </ul>
             )}
           </div>
         </div>

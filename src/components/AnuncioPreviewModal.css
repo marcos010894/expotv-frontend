@@ -136,12 +136,13 @@
 .tv-container {
     width: 360px; /* 50% de 720px para caber no modal */
     height: 612px; /* 50% de 1224px */
-    background: white;
+    background: #000;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 /* Barcode (topo - 5% = 61px -> escala 30.5px) */
@@ -151,125 +152,142 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 2px 5px;
-    font-size: 8px;
-    border-bottom: 1px solid #e5e7eb;
+    padding: 2px 5px; /* HTML usa padding: 4px 10px -> escala 50% = 2px 5px */
+    font-size: 9px; /* HTML usa 18px -> escala 50% = 9px */
+    font-weight: bold;
+    color: black;
     flex-shrink: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 .barcode-left {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 7.5px; /* HTML usa 15px -> escala 50% = 7.5px */
 }
 
 .hour-display {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
 .hour-time {
     font-weight: bold;
-    font-size: 12px;
+    font-size: 16px; /* HTML usa 32px -> escala 50% = 16px */
     line-height: 1;
+    color: #000;
+    margin: 0;
 }
 
 .hour-date {
-    font-size: 6px;
+    font-size: 5.5px; /* HTML usa 11px -> escala 50% = 5.5px */
     font-weight: 200;
-    color: #666;
+    color: #000;
 }
 
 .barcode-center {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 7.5px; /* HTML usa 15px -> escala 50% = 7.5px */
     flex: 1;
 }
 
 .info-item {
     display: flex;
     align-items: center;
-    gap: 1px;
+    gap: 1.5px; /* Mínimo de 1.5px para proximidade */
 }
 
 .info-icon {
-    font-size: 10px;
+    font-size: 11px; /* HTML usa 22px -> escala 50% = 11px */
+    margin-right: 1px;
 }
 
 .currency-flag {
-    font-size: 10px;
+    font-size: 11px; /* HTML usa 22px -> escala 50% = 11px */
+    margin-right: 1.5px; /* HTML usa 3px -> escala 50% = 1.5px */
 }
 
 .bitcoin-icon {
     background: #f7931a;
     color: white;
     border-radius: 50%;
-    width: 10px;
-    height: 10px;
+    width: 12px; /* HTML usa 24px -> escala 50% = 12px */
+    height: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 7px;
+    font-size: 8px; /* HTML usa 16px -> escala 50% = 8px */
+    margin-right: 1px;
 }
 
 .info-value {
-    font-size: 8px;
+    font-size: 8px; /* HTML usa 16px -> escala 50% = 8px */
     font-weight: 200;
+    color: #000;
 }
 
 .info-unit {
-    font-size: 8px;
+    font-size: 8px; /* HTML usa 16px -> escala 50% = 8px */
     font-weight: 200;
+    color: #000;
+    margin-left: 1px;
 }
 
 .barcode-right {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 7.5px; /* HTML usa 15px -> escala 50% = 7.5px */
 }
 
 .logo-placeholder {
-    width: 18px;
-    height: 18px;
+    width: 22.5px; /* HTML usa 45px -> escala 50% = 22.5px */
+    height: 22.5px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
+    font-size: 14px;
     background: #f3f4f6;
+    flex-shrink: 0;
+    object-fit: cover;
 }
 
 .social-info {
     display: flex;
     flex-direction: column;
-    gap: 1px;
+    gap: 1px; /* HTML usa 2px -> escala 50% = 1px */
 }
 
 .social-item {
     display: flex;
     align-items: center;
-    gap: 2px;
-    font-size: 6px;
+    gap: 2px; /* HTML usa 4px -> escala 50% = 2px */
+    font-size: 6.5px; /* HTML usa 13px -> escala 50% = 6.5px */
     font-weight: 200;
+    color: #000;
 }
 
 .social-item svg {
-    font-size: 7px;
+    font-size: 8px; /* HTML usa 16px -> escala 50% = 8px */
 }
 
 /* Área do Anúncio (75% = 459px ou 95% = 581.5px) */
 .tv-anuncio-area {
     height: 459px; /* 75% de 612px para Template 1 */
-    background: #3399ff;
+    background: #3399ff; /* HTML usa #3399ff como background padrão */
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     position: relative;
     flex-shrink: 0;
+    font-size: 11px; /* HTML usa 22px -> escala 50% = 11px */
+    font-weight: bold;
+    color: white;
 }
 
 /* Template 2: Anúncio ocupa 95% */
@@ -281,34 +299,47 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
 }
 
 .tv-anuncio-placeholder {
     text-align: center;
-    color: white;
+    color: rgba(255, 255, 255, 0.9);
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: bold;
 }
 
 .tv-anuncio-placeholder svg {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+    opacity: 0.7;
 }
 
 .tv-anuncio-placeholder p {
-    margin: 5px 0;
-    font-size: 12px;
+    margin: 0;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 /* Área de Notícias (20% = 122.5px - apenas Template 1) */
 .tv-noticia-area {
     height: 122.5px; /* 20% de 612px */
-    background: black;
+    background: black; /* HTML usa black */
     color: white;
     display: flex;
     align-items: center;
-    padding: 8px;
-    font-size: 8px;
+    padding: 10px; /* HTML usa 20px -> escala 50% = 10px */
+    font-size: 10px; /* HTML usa 20px -> escala 50% = 10px */
+    font-weight: bold;
     overflow: hidden;
     flex-shrink: 0;
+    box-sizing: border-box;
 }
 
 /* Template 2: Esconder notícias */
@@ -318,8 +349,9 @@
 
 .noticia-content-mock {
     display: flex;
-    gap: 6px;
+    gap: 5px; /* HTML usa margin-right: 10px no .imagensNoticias */
     width: 100%;
+    align-items: center;
 }
 
 .noticia-image-mock {
@@ -327,42 +359,50 @@
 }
 
 .noticia-image-placeholder {
-    width: 100px;
-    height: 100px;
-    background: #333;
-    border-radius: 6px;
+    width: 105.5px; /* HTML usa 211px -> escala 50% = 105.5px */
+    height: 105.5px;
+    background: #1a1a1a;
+    border-radius: 5px; /* HTML usa 10px -> escala 50% = 5px */
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 32px;
+    font-size: 36px;
 }
 
 .noticia-text-mock {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 5px; /* Espaçamento entre título e descrição */
+    min-width: 0;
 }
 
 .noticia-title-mock {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px; /* HTML usa margin-right: 12px -> escala 50% = 6px */
     font-weight: bold;
-    font-size: 10px;
+    font-size: 10px; /* HTML usa 20px (inherited) -> escala 50% = 10px */
+    line-height: 1.2;
 }
 
 .quote-icon {
     color: #8b0000;
-    font-size: 20px;
+    font-size: 32px; /* HTML usa 64px -> escala 50% = 32px */
     flex-shrink: 0;
 }
 
 .noticia-desc-mock {
-    font-size: 7px;
-    line-height: 1.4;
-    color: #ccc;
+    font-size: 10px; /* HTML usa 20px (inherited) -> escala 50% = 10px */
+    line-height: 1.3;
+    color: #f0f0f0; /* Cor mais clara como no HTML */
     font-weight: 200;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Ajustado para 3 linhas */
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    text-align: justify; /* HTML usa text-align: justify */
 }
 
 /* Informações do Preview */
