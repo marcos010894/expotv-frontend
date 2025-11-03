@@ -637,12 +637,13 @@ export const avisoService = {
         formData.append('data_expiracao', avisoData.data_expiracao);
       }
       
+      // Backend espera sempre o campo 'media' (seja imagem ou vídeo)
       if (avisoData.image) {
         formData.append('media', avisoData.image);
       }
 
       if (avisoData.video) {
-        formData.append('video', avisoData.video);
+        formData.append('media', avisoData.video);
       }
 
       const response = await api.post<Aviso>('/avisos', formData, {
@@ -682,12 +683,13 @@ export const avisoService = {
         formData.append('data_expiracao', avisoData.data_expiracao || '');
       }
       
+      // Backend espera sempre o campo 'media' (seja imagem ou vídeo)
       if (avisoData.image) {
-        formData.append('image', avisoData.image);
+        formData.append('media', avisoData.image);
       }
 
       if (avisoData.video) {
-        formData.append('video', avisoData.video);
+        formData.append('media', avisoData.video);
       }
 
       const response = await api.put<Aviso>(`/avisos/${id}`, formData, {

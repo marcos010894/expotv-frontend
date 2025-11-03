@@ -157,7 +157,7 @@ export function DetalhesTVPage({ tvId, onBack }: Props) {
                                         <span className="proporção-value">{tv.proporcao_anuncios ?? 5}</span>
                                         <span className="proporção-label">Anúncios</span>
                                     </div>
-                                    {tv.template === 'layout2' && (
+                                    {tv.template === 'Template 2' && (
                                         <>
                                             <span className="proporção-sep">:</span>
                                             <div className="proporção-item">
@@ -170,7 +170,7 @@ export function DetalhesTVPage({ tvId, onBack }: Props) {
                                 </div>
                                 <p className="config-hint">
                                     Esta TV exibe {tv.proporcao_avisos ?? 1} aviso(s) para cada {tv.proporcao_anuncios ?? 5} anúncio(s)
-                                    {tv.template === 'layout2' && ` e ${tv.proporcao_noticias ?? 3} notícia(s) em tela cheia`}.
+                                    {tv.template === 'Template 2' && ` e ${tv.proporcao_noticias ?? 3} notícia(s) em tela cheia`}.
                                 </p>
                             </div>
 
