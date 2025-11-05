@@ -425,8 +425,9 @@ export default function EditarAvisoPage({ avisoId, onBack, onSuccess, onError }:
               <ImageUpload 
                 onImageSelect={handleImageSelect}
                 value={formData.image}
-                placeholder="Clique para selecionar uma nova imagem/vídeo para o aviso ou arraste aqui"
-                allowVideo={true}
+                placeholder="Clique para selecionar uma nova imagem para o aviso (GIF, JPG, PNG, JPEG, WEBP)"
+                accept=".gif,.jpg,.jpeg,.png,.webp,image/gif,image/jpeg,image/png,image/webp"
+                allowVideo={false}
               />
             )}
           </div>

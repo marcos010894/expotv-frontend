@@ -389,8 +389,9 @@ export default function RegistrarAvisoPage({ onBack, onSuccess, onError }: Regis
               <ImageUpload 
                 onImageSelect={handleImageSelect}
                 value={formData.image}
-                placeholder="Clique para selecionar uma imagem/vídeo para o aviso ou arraste aqui"
-                allowVideo={true}
+                placeholder="Clique para selecionar uma imagem para o aviso (GIF, JPG, PNG, JPEG, WEBP)"
+                accept=".gif,.jpg,.jpeg,.png,.webp,image/gif,image/jpeg,image/png,image/webp"
+                allowVideo={false}
               />
             )}
           </div>

@@ -268,12 +268,13 @@ export default function RegistrarAnuncioPage({ onBack, onSuccess, onError }: Reg
           </div>
 
           <div className="form-group image-upload-group">
-            <label>Imagem ou Vídeo do Anúncio</label>
+            <label>Imagem do Anúncio</label>
             <ImageUpload 
               onImageSelect={handleImageSelect}
               value={formData.image}
-              placeholder="Clique para selecionar uma imagem ou vídeo para o anúncio ou arraste aqui"
-              allowVideo={true}
+              placeholder="Clique para selecionar uma imagem para o anúncio (GIF, JPG, PNG, JPEG, WEBP)"
+              accept=".gif,.jpg,.jpeg,.png,.webp,image/gif,image/jpeg,image/png,image/webp"
+              allowVideo={false}
             />
           </div>
 
